@@ -1,0 +1,16 @@
+{
+  "name": "kexcel",
+  "version": "0.8.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "q": "*",
+    "unzip": "*",
+    "temp": "*",
+    "fstream": "*",
+    "walk": "*",
+    "xml2js": "*"
+  }
+}
