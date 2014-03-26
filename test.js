@@ -12,6 +12,8 @@ Q.nfcall( kexcel.open, 'export.xlsx')
             var newsheet = kexcel.duplicateSheet(kexcel.sheets[0],'testduplicate');
             newsheet.replaceRow(12,{A12:'bla2'});
             kexcel.sheets[0].replaceRow(12, {A12: 'bla'});
+            kexcel.sheets[0].replaceRow(13, {B13: 'blamore'});
+            kexcel.sheets[0].setCellValue(14,3,'tester', 'C12');
             var output = fs.createWriteStream(__dirname + '/tester.xlsx');
             kexcel.pipe(output,function(){
                 console.log('done!');
