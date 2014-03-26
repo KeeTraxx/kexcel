@@ -8,11 +8,15 @@ var Q = require('q');
 
 Q.nfcall( kexcel.open, 'export.xlsx')
     .then(function(kexcel){
-        console.log( kexcel.sheets );
-        console.log( kexcel.sheets[0].getName() );
-        console.log( kexcel.sheets[0].getTree() );
-        kexcel.sheets[0].replaceRow(12, {A12: 'bla'});
-        console.log('a');
-        kexcel.sheets[0].save();
-        console.log('f');
+        try{
+            var newsheet = kexcel.duplicateSheet(kexcel.sheets[0],'testduplicate');
+            newsheet.replaceRow(12,{A12:'bla2'});
+            kexcel.sheets[0].replaceRow(12, {A12: 'bla'});
+            var output = fs.createWriteStream(__dirname + '/tester.xlsx');
+            kexcel.pipe(output,function(){
+                console.log('done!');
+            });
+        }catch(e){
+            console.log(e.stack);
+        }
     });

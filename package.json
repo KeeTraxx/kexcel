@@ -4,11 +4,12 @@
   "private": true,
   "dependencies": {
     "q": "*",
-    "unzip": "*",
+    "archiver": "*",
     "temp": "*",
     "fstream": "*",
     "elementtree": "*",
-    "underscore": "*"
+    "underscore": "*",
+    "node-uuid": "*"
   },
   "main": "lib/Workbook.js"
 }
