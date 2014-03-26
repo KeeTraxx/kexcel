@@ -9,6 +9,7 @@
     "fstream": "*",
     "elementtree": "*",
     "underscore": "*",
+    "unzip": "*",
     "node-uuid": "*"
   },
   "main": "lib/Workbook.js"
