@@ -17,6 +17,7 @@ Q.nfcall( kexcel.open, 'export.xlsx')
             var output = fs.createWriteStream(__dirname + '/tester.xlsx');
             kexcel.pipe(output,function(){
                 console.log('done!');
+                kexcel.close();
             });
         }catch(e){
             console.log(e.stack);
