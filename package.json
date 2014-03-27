@@ -1,7 +1,11 @@
 {
   "name": "kexcel",
   "version": "0.8.1",
+  "description": "Create or open and then edit existing XLSX files",
+  "keywords": ["xlsx", "excel", "spreadsheet"],
   "private": true,
+  "author": "Khôi Tran",
+  "license": "MIT",
   "dependencies": {
     "q": "*",
     "archiver": "*",
@@ -10,7 +14,7 @@
     "elementtree": "*",
     "underscore": "*",
     "unzip": "*",
-    "node-uuid": "*"
+    "rimraf": "*"
   },
   "main": "lib/Workbook.js"
 }
