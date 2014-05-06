@@ -9,13 +9,17 @@ var Q = require('q');
 Q.nfcall( kexcel.open, 'templates/empty.xlsx')
     .then(function(kexcel){
         try{
-            //var newsheet = kexcel.duplicateSheet(kexcel.sheets[0],'testduplicate');
-            console.log(kexcel.sharedStringsXml.xml.write());
-            //newsheet.replaceRow(12,{A12:'bla2'});
-            //kexcel.sheets[0].replaceRow(12, {A12: 'bla'});
-            //kexcel.sheets[0].replaceRow(13, {B13: 'blamore'});
-            kexcel.sheets[0].setCellValue(13,3,'tester', 'C13');
-            kexcel.sheets[0].setCellValue(14,3,'tester', 'C14');
+            var newsheet = kexcel.duplicateSheet(kexcel.sheets[0],'testduplicate');
+
+            for(var r=1;r<100;r++) {
+                for(var c=1;c<100;c++) {
+                    newsheet.setCellValue( r, c,  String(~~(Math.random() * 300) ));
+                }
+            }
+
+            kexcel.sheets[0].setCellValue(13,3,'tester');
+            kexcel.sheets[0].setCellValue(13,5,'tester2');
+            kexcel.sheets[0].setCellValue(14,3,'tester');
             var output = fs.createWriteStream(__dirname + '/tester.xlsx');
             kexcel.pipe(output,function(){
                 console.log('done!');
