@@ -2,19 +2,26 @@
   "name": "kexcel",
   "version": "0.8.2",
   "description": "Create or open and then edit existing XLSX files",
-  "keywords": ["xlsx", "excel", "spreadsheet"],
-  "private": true,
-  "author": "Khôi Tran",
+  "keywords": [
+    "xlsx",
+    "excel",
+    "spreadsheet"
+  ],
+  "author": "Khôi Tran <kt@compile.ch> (http://www.tran-engineering.ch)",
   "license": "MIT",
   "dependencies": {
-    "q": "*",
-    "archiver": "*",
-    "temp": "*",
-    "fstream": "*",
-    "elementtree": "*",
-    "underscore": "*",
-    "unzip": "*",
-    "rimraf": "*"
+    "q": "~1.0.1",
+    "archiver": "~0.10.0-alpha",
+    "temp": "~0.7.0",
+    "fstream": "~0.1.25",
+    "elementtree": "~0.1.6",
+    "underscore": "~1.6.0",
+    "unzip": "~0.1.9",
+    "rimraf": "~2.2.8"
   },
-  "main": "lib/Workbook.js"
+  "main": "lib/Workbook.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KeeTraxx/kexcel"
+  }
 }
