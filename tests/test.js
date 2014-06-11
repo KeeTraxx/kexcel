@@ -1,8 +1,10 @@
 var kexcel = require('../');
 var fs = require('fs');
 var path = require('path');
-var filepath = path.join(__dirname, 'examples/input','empty.xlsx');
+var filepath = path.join(__dirname, '../examples/input','empty.xlsx');
+
 kexcel.open( filepath, function(err, workbook) {
+    try {
     // Get first sheet
     var sheet1 = workbook.sheets[0];
 
@@ -16,6 +18,8 @@ kexcel.open( filepath, function(err, workbook) {
     sheet1.setCellValue(5,8,'Somewhere...');
     sheet1.setCellValue(6,1,'This cell copies the style from cell A1', 'A1');
 
+    console.log('Should print: Somewhere...',sheet1.getCellValue(5,8));
+
     // Put random numbers in the duplicated sheet
     for(var r=1;r<100;r++) {
         for(var c=1;c<100;c++) {
@@ -23,10 +27,16 @@ kexcel.open( filepath, function(err, workbook) {
         }
     }
 
+    console.log('Random number: ',duplicatedSheet.getCellValue(5,8));
+
     // Save the file
     var output = fs.createWriteStream(__dirname + '/output.xlsx');
     workbook.pipe(output,function(){
         console.log('done!');
         workbook.close();
     });
+
+    } catch(e) {
+        console.log(e);
+    }
 });
