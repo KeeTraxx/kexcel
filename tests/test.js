@@ -1,22 +1,12 @@
-kexcel
-======
-
-Excel 2007+ file manipulator.
-
-Usage
------
-
-### Basic usage
-
-```javascript
-var kexcel = require('kexcel');
+var kexcel = require('../');
 var fs = require('fs');
 var path = require('path');
-var filepath = path.join(__dirname, 'myspreadsheet.xlsx');
-kexcel.open( filepath, function(err, workbook) {
+var filepath = path.join(__dirname, '../examples/input','empty.xlsx');
 
+kexcel.open( filepath, function(err, workbook) {
+    try {
     // Get first sheet
-    var sheet1 = kexcel.sheets[0];
+    var sheet1 = workbook.sheets[0];
 
     // Duplicate a sheet
     var duplicatedSheet = workbook.duplicateSheet(sheet1,'My duplicated sheet');
@@ -26,9 +16,9 @@ kexcel.open( filepath, function(err, workbook) {
     sheet1.setCellValue(1,1,'foo in first row and first column');
     sheet1.setCellValue(5,1,'bar in fifth row and first column');
     sheet1.setCellValue(5,8,'Somewhere...');
-
-    // Insert cell value, also copy style from another cell.
     sheet1.setCellValue(6,1,'This cell copies the style from cell A1', 'A1');
+
+    console.log('Should print: Somewhere...',sheet1.getCellValue(5,8));
 
     // Put random numbers in the duplicated sheet
     for(var r=1;r<100;r++) {
@@ -37,11 +27,16 @@ kexcel.open( filepath, function(err, workbook) {
         }
     }
 
+    console.log('Random number: ',duplicatedSheet.getCellValue(5,8));
+
     // Save the file
-    var output = fs.createWriteStream(__dirname + '/tester.xlsx');
+    var output = fs.createWriteStream(__dirname + '/output.xlsx');
     workbook.pipe(output,function(){
         console.log('done!');
         workbook.close();
     });
+
+    } catch(e) {
+        console.log(e);
+    }
 });
-```
