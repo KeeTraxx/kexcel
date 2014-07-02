@@ -1,6 +1,6 @@
 {
   "name": "kexcel",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "Create or open and then edit existing XLSX files",
   "keywords": [
     "xlsx",
