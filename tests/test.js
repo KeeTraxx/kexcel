@@ -16,7 +16,11 @@ kexcel.open( filepath, function(err, workbook) {
     sheet1.setCellValue(1,1,'foo in first row and first column');
     sheet1.setCellValue(5,1,'bar in fifth row and first column');
     sheet1.setCellValue(5,8,'Somewhere...');
+        sheet1.setCellValue(5,26,'Z Column');
+        sheet1.setCellValue(5,27,'AA Column');
     sheet1.setCellValue(6,1,'This cell copies the style from cell A1', 'A1');
+
+    console.log(sheet1.getRowValues(5));
 
     console.log('Should print: Somewhere...',sheet1.getCellValue(5,8));
 
@@ -37,6 +41,6 @@ kexcel.open( filepath, function(err, workbook) {
     });
 
     } catch(e) {
-        console.log(e);
+        console.log(e.stack);
     }
 });
