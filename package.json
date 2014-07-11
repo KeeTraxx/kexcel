@@ -1,6 +1,6 @@
 {
   "name": "kexcel",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description": "Create or open and then edit existing XLSX files",
   "keywords": [
     "xlsx",
@@ -11,9 +11,9 @@
   "license": "MIT",
   "dependencies": {
     "q": "~1.0.1",
-    "archiver": "~0.10.0-alpha",
+    "archiver": "~0.10.1",
     "temp": "~0.7.0",
-    "fstream": "~0.1.25",
+    "fstream": "~0.1.28",
     "elementtree": "~0.1.6",
     "underscore": "~1.6.0",
     "unzip": "~0.1.9",
