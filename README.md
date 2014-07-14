@@ -3,6 +3,16 @@ kexcel
 
 Excel 2007+ file manipulator.
 
+Features
+--------
+ * Read Excel 2007+ .xlsx files
+   * Support for reading String and Number values from cells (no formula support yet)
+ * Modify / Write Excel 2007+ .xlsx files
+   * Write Strings / Numbers / Formulas to cells
+   * Copy/Duplicate existing sheets
+   * Copy styles from other cells
+   * No support for setting custom styles yet.
+
 Usage
 -----
 
