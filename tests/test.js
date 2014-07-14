@@ -22,6 +22,8 @@ kexcel.open(filepath, function (err, workbook) {
         sheet1.setCellValue(7,1,'=HYPERLINK("http://www.google.ch","Google")');
         sheet1.setCellValue(8,1,'=1+1');
 
+        sheet1.replaceRow(9,['a', 'b', 'c']);
+
         console.log(sheet1.getRowValues(5));
 
         console.log('Should print: Somewhere...', sheet1.getCellValue(5, 8));
