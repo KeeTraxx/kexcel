@@ -17,9 +17,11 @@
     "elementtree": "~0.1.6",
     "underscore": "~1.6.0",
     "unzip": "~0.1.9",
-    "rimraf": "~2.2.8"
+    "rimraf": "~2.2.8",
+    "xml2js": "^0.4.4",
+    "async": "^0.9.0"
   },
-  "main": "lib/Workbook.js",
+  "main": "lib/kexcel.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/KeeTraxx/kexcel"
