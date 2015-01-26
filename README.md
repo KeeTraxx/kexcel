@@ -1,10 +1,9 @@
-kexcel
-======
+# kexcel
 
 Excel 2007+ file manipulator.
 
-Features
---------
+## Features
+
  * Read Excel 2007+ .xlsx files
    * Support for reading String and Number values from cells
  * Create / Modify / Write Excel 2007+ .xlsx files
@@ -13,10 +12,9 @@ Features
    * Copy styles from other cells
    * No support for setting custom styles yet.
 
-Usage
------
+## Usage
 
-### Basic usage
+### Create a new excel file
 
 ```javascript
 var kexcel = require('kexcel');
@@ -44,6 +42,25 @@ kexcel.new( function(err, workbook) {
             duplicatedSheet.setCellValue( r, c,  ~~(Math.random() * 300) );
         }
     }
+
+    // Save the file
+    var output = fs.createWriteStream(__dirname + '/tester.xlsx');
+    workbook.pipe(output);
+});
+```
+
+### Open an existing excel file
+
+```javascript
+var kexcel = require('kexcel');
+var fs = require('fs');
+kexcel.open( 'myspreadsheet.xlsx', function(err, workbook) {
+
+    // Get first sheet
+    var sheet1 = workbook.getSheet(0);
+
+    // Duplicate a sheet
+    var duplicatedSheet = workbook.duplicateSheet(0,'My duplicated sheet');
 
     // Save the file
     var output = fs.createWriteStream(__dirname + '/tester.xlsx');
