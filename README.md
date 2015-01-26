@@ -6,8 +6,8 @@ Excel 2007+ file manipulator.
 Features
 --------
  * Read Excel 2007+ .xlsx files
-   * Support for reading String and Number values from cells (no formula support yet)
- * Modify / Write Excel 2007+ .xlsx files
+   * Support for reading String and Number values from cells
+ * Create / Modify / Write Excel 2007+ .xlsx files
    * Write Strings / Numbers / Formulas to cells
    * Copy/Duplicate existing sheets
    * Copy styles from other cells
@@ -21,15 +21,13 @@ Usage
 ```javascript
 var kexcel = require('kexcel');
 var fs = require('fs');
-var path = require('path');
-var filepath = path.join(__dirname, 'myspreadsheet.xlsx');
-kexcel.open( filepath, function(err, workbook) {
+kexcel.new( function(err, workbook) {
 
     // Get first sheet
-    var sheet1 = kexcel.sheets[0];
+    var sheet1 = workbook.getSheet(0);
 
     // Duplicate a sheet
-    var duplicatedSheet = workbook.duplicateSheet(sheet1,'My duplicated sheet');
+    var duplicatedSheet = workbook.duplicateSheet(0,'My duplicated sheet');
 
     // Add some data to the first sheet
     // Caution!! Row and column are 1-based
@@ -49,9 +47,6 @@ kexcel.open( filepath, function(err, workbook) {
 
     // Save the file
     var output = fs.createWriteStream(__dirname + '/tester.xlsx');
-    workbook.pipe(output,function(){
-        console.log('done!');
-        workbook.close();
-    });
+    workbook.pipe(output);
 });
 ```

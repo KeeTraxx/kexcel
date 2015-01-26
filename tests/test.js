@@ -5,20 +5,30 @@ var fs = require('fs');
 });*/
 
 kexcel.new(function(err, workbook){
-    workbook.getSheet(0).setCellValue(1,10,42);
-    workbook.getSheet(0).setCellValue(1,11,'TEST');
-    workbook.getSheet(0).setCellValue(1,12,'Test');
-    workbook.getSheet(0).setCellValue(1,6,'Inserted');
 
-    workbook.getSheet(0).setCellValue(3,3,'Copied style from A1', 'A1');
+    // Get first sheet
+    var sheet1 = workbook.getSheet(0);
 
-    console.log(workbook.getSheet(0).getCellValue(1,1));
-    console.log(workbook.getSheet(0).getRowValues(1));
+    // Duplicate a sheet
+    var duplicatedSheet = workbook.duplicateSheet(0,'My duplicated sheet');
 
+    // Add some data to the first sheet
+    // Caution!! Row and column are 1-based
+    sheet1.setCellValue(1,1,'foo in first row and first column');
+    sheet1.setCellValue(5,1,'bar in fifth row and first column');
+    sheet1.setCellValue(5,8,'Somewhere...');
 
-    workbook.getSheet(0).setRowValues(10,['A', 'b', 4242]);
+    // Insert cell value, also copy style from another cell.
+    //sheet1.setCellValue(6,1,'This cell copies the style from cell A1', 'A1');
 
-    workbook.duplicateSheet(0);
+    // Put random numbers in the duplicated sheet
+    for(var r=1;r<100;r++) {
+        for(var c=1;c<100;c++) {
+            duplicatedSheet.setCellValue( r, c,  ~~(Math.random() * 300) );
+        }
+    }
 
-    workbook.pipe(fs.createWriteStream('super.xlsx'));
+    // Save the file
+    var output = fs.createWriteStream(__dirname + '/tester.xlsx');
+    workbook.pipe(output);
 });
