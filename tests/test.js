@@ -4,7 +4,7 @@ var fs = require('fs');
     //workbook.pipe(fs.createWriteStream('super.xlsx'));
 });*/
 
-kexcel.open('tests/Mappe1.xlsx',function(err, workbook){
+kexcel.new(function(err, workbook){
     workbook.getSheet(0).setCellValue(1,10,42);
     workbook.getSheet(0).setCellValue(1,11,'TEST');
     workbook.getSheet(0).setCellValue(1,12,'Test');
