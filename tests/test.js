@@ -16,5 +16,7 @@ kexcel.open('Mappe1.xlsx',function(err, workbook){
 
     workbook.getSheet(0).setRowValues(10,['A', 'b', 4242]);
 
+    workbook.duplicateSheet(0);
+
     workbook.pipe(fs.createWriteStream('super.xlsx'));
 });
