@@ -32,3 +32,30 @@ kexcel.new(function(err, workbook){
     var output = fs.createWriteStream(__dirname + '/tester.xlsx');
     workbook.pipe(output);
 });
+
+var express = require('express');
+
+var app = express();
+
+app.get('/', function (req, res) {
+    kexcel.new(function(err, workbook) {
+        var sheet = workbook.getSheet(0);
+        sheet.setCellValue(1,1,'Hello World!');
+        sheet.setRowValues(2, ['Hello', 'even', 'more', 'Worlds']);
+        sheet.setRowValues(3, [1, '+', 2, 'equals','=A3+C3']);
+
+        res.setHeader('Content-disposition', 'attachment; filename=myfile.xlsx');
+        res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        workbook.pipe(res);
+
+    });
+});
+
+var server = app.listen(3000, function () {
+
+    var host = server.address().address
+    var port = server.address().port
+
+    console.log('Example app listening at http://%s:%s', host, port)
+
+});
