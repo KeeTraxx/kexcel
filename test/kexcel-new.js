@@ -7,6 +7,7 @@ describe('Basic kexcel sheet test', function () {
     var workbook;
     it('Create a new sheet', function (done) {
         kexcel.new(function (err, wb) {
+            if ( err ) throw err;
             workbook = wb;
             done();
         });
