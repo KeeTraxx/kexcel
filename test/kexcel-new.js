@@ -1,6 +1,7 @@
 var chai = require('chai');
 var fs = require('fs');
 var should = chai.should();
+var expect = chai.expect;
 
 var kexcel = require('..');
 var path = require('path');
@@ -35,6 +36,40 @@ describe('Basic kexcel sheet test', function () {
         row2.should.contain(19);
     });
 
+    it('Duplicate a sheet', function() {
+        var sheet = workbook.duplicateSheet(0, 'Duplicated Sheet');
+
+        sheet.getCellValue(1,1).should.equal('Hello World');
+        sheet.setCellValue(2,2, 'Another World');
+
+        workbook.getSheet(0).getCellValue(2,2).should.equal('World');
+        sheet.getCellValue(2,2).should.equal('Another World');
+
+    });
+
+    it('Get a cell by Excel reference', function(){
+        workbook.getSheet(0).getCellValue('A1').should.equal('Hello World');
+    });
+
+    it('Set a cell value by Excel reference', function(){
+        workbook.getSheet(1).setCellValueByRef('A1', 'This is Sparta!!');
+        workbook.getSheet(1).getCellValue('A1').should.equal('This is Sparta!!');
+    });
+
+    it('Set using undefined values does nothing', function(){
+        // TODO: Actually this should empty the cell?
+        workbook.getSheet(0).setCellValue(1,1,null);
+    });
+
+    it('Get an undefined cell', function(){
+        expect(workbook.getSheet(0).getCellValue(200,200)).to.be.undefined;
+        expect(workbook.getSheet(0).getCellValue(1,200)).to.be.undefined;
+    });
+
+    it('Get a undefined row', function(){
+        expect(workbook.getSheet(0).getRowValues(200)).to.be.undefined;
+    });
+
     it('Save sheet to output.xlsx', function (done) {
         var file = path.join(__dirname, 'output-files', 'output.xlsx' );
         var ws = fs.createWriteStream(file);
@@ -45,5 +80,7 @@ describe('Basic kexcel sheet test', function () {
         });
         workbook.pipe(ws);
     });
+
+
 
 });
