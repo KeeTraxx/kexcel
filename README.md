@@ -1,4 +1,5 @@
 # kexcel
+[![Build Status](https://travis-ci.org/KeeTraxx/kexcel.svg?branch=master)](https://travis-ci.org/KeeTraxx/kexcel)
 
 Excel 2007+ file manipulator.
 
