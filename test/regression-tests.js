@@ -80,10 +80,10 @@ describe('Complicated formulae', function () {
             sheet.setCellValue(row, 2, '=SUM(A1:A10)');
             sheet.setCellValue(row, 1, 'Sum');
             row++;
-            sheet.setCellValue(row, 2, '=AVERAGE(A1:A10)');
+            sheet.setCellValue(row, 2, '=AVERAGE(A1;A2)');
             sheet.setCellValue(row, 1, 'Average');
             row++;
-            sheet.setCellValue(row, 2, '=CONCATENATE(A1;A2;A3;A4;A5;A6;A7;A8;A9;A10)');
+            sheet.setCellValue(row, 2, '=CONCATENATE(A1;A2;A3;A4;A5;A6;A7;A8;A9)');
             sheet.setCellValue(row, 1, 'Concat');
 
             done();
