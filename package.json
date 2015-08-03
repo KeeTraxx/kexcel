@@ -28,7 +28,7 @@
     "express": "~4.11.0"
   },
   "scripts": {
-    "test": "grunt mochaTest"
+    "test": "mocha"
   },
   "main": "lib/kexcel.js",
   "repository": {
