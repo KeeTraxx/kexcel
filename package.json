@@ -20,19 +20,30 @@
     "xml2js": "^0.4.4"
   },
   "devDependencies": {
-    "mocha": "~2.1.0",
+    "blanket": "^1.1.7",
+    "chai": "~1.10.0",
+    "coveralls": "^2.11.3",
+    "express": "~4.11.0",
     "grunt": "~0.4.5",
     "grunt-mocha-test": "~0.12.6",
-    "chai": "~1.10.0",
-    "request": "~2.51.0",
-    "express": "~4.11.0"
+    "mocha": "~2.1.0",
+    "request": "~2.51.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js"
   },
   "main": "lib/kexcel.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/KeeTraxx/kexcel"
+  },
+  "config": {
+    "blanket": {
+      "pattern": "lib",
+      "data-cover-never": [
+        "node_modules",
+        "tests"
+      ]
+    }
   }
 }

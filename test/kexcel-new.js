@@ -1,6 +1,7 @@
 var chai = require('chai');
 var fs = require('fs');
 var should = chai.should();
+
 var kexcel = require('..');
 var path = require('path');
 
