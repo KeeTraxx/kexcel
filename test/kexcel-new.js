@@ -2,6 +2,7 @@ var chai = require('chai');
 var fs = require('fs');
 var should = chai.should();
 var kexcel = require('..');
+var path = require('path');
 
 describe('Basic kexcel sheet test', function () {
     var workbook;
@@ -34,10 +35,11 @@ describe('Basic kexcel sheet test', function () {
     });
 
     it('Save sheet to output.xlsx', function (done) {
-        var ws = fs.createWriteStream('output.xlsx');
+        var file = path.join(__dirname, 'output-files', 'output.xlsx' );
+        var ws = fs.createWriteStream(file);
         ws.on('close', function (err) {
             should.not.exist(err);
-            fs.existsSync('output.xlsx').should.be.true;
+            fs.existsSync(file).should.be.true;
             done();
         });
         workbook.pipe(ws);
