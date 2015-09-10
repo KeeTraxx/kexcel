@@ -86,6 +86,13 @@ describe('Basic kexcel sheet test', function () {
         workbook.getSheet(0).getCellValue(42, 2).should.equal('forty');
     });
 
+    it('Append a row', function () {
+        workbook.getSheet(0).appendRow(['Forty', 'Three']);
+        console.log(workbook.getSheet(0).getLastRowNumber());
+        workbook.getSheet(0).getLastRowNumber().should.equal(43);
+        workbook.getSheet(0).getCellValue(3, 2).should.equal('two');
+    });
+
     it('Save sheet to output.xlsx', function (done) {
         var file = path.join(__dirname, 'output-files', 'output.xlsx');
         var ws = fs.createWriteStream(file);
