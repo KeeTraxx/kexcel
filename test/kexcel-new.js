@@ -88,7 +88,6 @@ describe('Basic kexcel sheet test', function () {
 
     it('Append a row', function () {
         workbook.getSheet(0).appendRow(['Forty', 'Three']);
-        console.log(workbook.getSheet(0).getLastRowNumber());
         workbook.getSheet(0).getLastRowNumber().should.equal(43);
         workbook.getSheet(0).getCellValue(3, 2).should.equal('two');
     });
