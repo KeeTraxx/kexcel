@@ -18,4 +18,8 @@ describe('Return values instead of functions', function () {
         workbook.getSheet(0).getCellValue(1,1).should.equal('42');
     });
 
+    it('Trailing white space test', function () {
+        workbook.getSheet(0).getCellValue(2,1).should.equal('test with trailing white space ');
+    });
+
 });
