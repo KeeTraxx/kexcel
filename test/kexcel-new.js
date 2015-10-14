@@ -28,6 +28,7 @@ describe('Basic kexcel sheet test', function () {
         workbook.getSheet(0).getCellValue(1, 1).should.contain('Hello World');
         workbook.getSheet(0).getCellValue(2, 7).should.contain('equals');
         var row2 = workbook.getSheet(0).getRowValues(2);
+
         row2.should.be.a.array;
         row2.length.should.equal(9);
         row2.should.contain('Hello');
@@ -90,6 +91,12 @@ describe('Basic kexcel sheet test', function () {
         workbook.getSheet(0).appendRow(['Forty', 'Three']);
         workbook.getSheet(0).getLastRowNumber().should.equal(43);
         workbook.getSheet(0).getCellValue(3, 2).should.equal('two');
+    });
+
+    it('Get a row with undefined values', function () {
+        workbook.getSheet(0).setRowValues(50, [null, undefined, 'hello' ]);
+        console.log(workbook.getSheet(0).getRowValues(50));
+        workbook.getSheet(0).getRowValues(50).should.eql([undefined, undefined, 'hello']);
     });
 
     it('Save sheet to output.xlsx', function (done) {
