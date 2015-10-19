@@ -98,3 +98,21 @@ describe('Complicated formulae', function () {
     });
 
 });
+
+
+describe('Sharedstrings composition', function () {
+    var workbook;
+    it('Open joblisting.xlsx', function (done) {
+        kexcel.open(path.join(__dirname, 'input-files', 'joblisting.xlsx'), function (err, wb) {
+            workbook = wb;
+                        done();
+        });
+
+    });
+
+
+    it('Compare composite string', function () {
+        workbook.getSheet(0).getCellValue(6,2).should.equal('Wir suchen eine/einen HilfsassistentIn(40%-50%) im Bereich Organisation und Betreuung der Weiterbildung CAS ICT-Beschaffungen, im Bereich Eventmanagement des Grossanlasses "IT-Beschaffungskonferenz" und für weitere Tätigkeiten in der Forschungsstelle Digitale Nachhaltigkeit');
+    });
+
+});
