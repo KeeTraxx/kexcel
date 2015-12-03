@@ -20,12 +20,12 @@
     "xml2js": "^0.4.15"
   },
   "devDependencies": {
+    "blanket": "^1.2.1",
     "chai": "^3.4.1",
-    "blanket": "^1.1.7",
-    "coveralls": "^2.11.3",
+    "coveralls": "^2.11.4",
     "express": "^4.11.0",
-    "mocha": "^2.1.0",
-    "mocha-lcov-reporter": "^0.0.2",
+    "mocha": "^2.3.4",
+    "mocha-lcov-reporter": "^1.0.0",
     "request": "^2.51.0"
   },
   "scripts": {
