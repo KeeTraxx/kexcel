@@ -35,7 +35,7 @@
   },
   "config": {
     "blanket": {
-      "pattern": "lib",
+      "pattern": ["js"],
       "data-cover-never": [
         "node_modules",
         "tests"
