@@ -1,0 +1,38 @@
+import * as Promise from "bluebird";
+import * as K from "..";
+import Workbook = require('./Workbook');
+import Saveable = require('./Saveable');
+declare class Sheet extends Saveable {
+    protected workbook: Workbook;
+    protected workbookXml: any;
+    protected relationshipXml: any;
+    protected id: string;
+    xml: any;
+    filename: string;
+    constructor(workbook: Workbook, workbookXml?: any, relationshipXml?: any);
+    load(): Promise<any>;
+    setName(name: string): void;
+    getName(): string;
+    create(): void;
+    copyFrom(sheet: Sheet): void;
+    setCellValue(rownum: number, colnum: number, cellvalue: any, copyCellStyle?: K.Cell): void;
+    getCellValueByRef(ref: string): string;
+    private getCell(rownum, colnum);
+    setRowValues(rownum: number, values: Array<string | number>): void;
+    private setRow(row, values);
+    appendRowValues(values: Array<string | number>): void;
+    getRowValues(rownum: number): Array<string | number>;
+    private getRowData(row);
+    getRowCount(): number;
+    getCellValue(rownum: number, colnum: number): string;
+    getValue(cell: K.Cell): string;
+    private getRow(rownum);
+    private setValue(cell, cellvalue);
+    toJSON(): any;
+    protected addRelationship(): void;
+    protected addContentType(): void;
+    protected addToWorkbook(): void;
+    static intToExcelColumn(col: number): string;
+    static excelColumnToInt(ref: string): number;
+}
+export = Sheet;
