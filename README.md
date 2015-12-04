@@ -2,8 +2,8 @@
 
 Manipulate .xlsx files - easy.
 
-[![Build Status](https://travis-ci.org/KeeTraxx/kexcel.svg?branch=3.0)](https://travis-ci.org/KeeTraxx/kexcel) 
-[![Coverage Status](https://coveralls.io/repos/KeeTraxx/kexcel/badge.svg?branch=3.0&service=github)](https://coveralls.io/github/KeeTraxx/kexcel?branch=3.0)
+[![Build Status](https://travis-ci.org/KeeTraxx/kexcel.svg?branch=master)](https://travis-ci.org/KeeTraxx/kexcel) 
+[![Coverage Status](https://coveralls.io/repos/KeeTraxx/kexcel/badge.svg?branch=master&service=github)](https://coveralls.io/github/KeeTraxx/kexcel?branch=3.0)
 
 ## Notes and information
 
