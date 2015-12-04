@@ -3,16 +3,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var fs = require("fs");
-var xml2js = require("xml2js");
 var Promise = require("bluebird");
 var Util = require("./Util");
 var Saveable = require('./Saveable');
-var parseString = Promise.promisify(xml2js.parseString);
-var readFile = Promise.promisify(fs.readFile);
-var fileExists = Promise.promisify(fs.exists);
-var writeFile = Promise.promisify(fs.writeFile);
-var builder = new xml2js.Builder();
 var SharedStrings = (function (_super) {
     __extends(SharedStrings, _super);
     function SharedStrings(path, workbook) {
@@ -37,7 +30,6 @@ var SharedStrings = (function (_super) {
                     _this.xml = xml;
                 });
             }).finally(function () {
-                var self = _this;
                 _this.xml.sst.si.forEach(function (si, index) {
                     if (si.t) {
                         _this.cache[si.t[0]] = index;

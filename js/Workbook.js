@@ -40,7 +40,6 @@ var Workbook = (function () {
         }).thenReturn(this);
     };
     Workbook.prototype.initSharedStrings = function () {
-        var self = this;
         this.sharedStrings = new SharedStrings(path.join(this.tempDir, 'xl', 'sharedStrings.xml'), this);
         return this.sharedStrings.load();
     };
@@ -68,12 +67,14 @@ var Workbook = (function () {
                 if (typeof _this.input == 'string') {
                     stream = fs.createReadStream(_this.input);
                 }
-                stream.pipe(unzip.Parse()).pipe(fstream.Writer(tempDir)).on('close', function () { resolve(_this); });
+                var outstream = stream.pipe(unzip.Parse()).pipe(fstream.Writer(tempDir));
+                outstream.on('close', function () { resolve(_this); });
+                outstream.on('error', function () { return reject; });
             });
         });
     };
-    Workbook.prototype.getXML = function (filepath) {
-        return this.files[filepath].xml;
+    Workbook.prototype.getXML = function (filePath) {
+        return this.files[filePath].xml;
     };
     Workbook.prototype.createSheet = function (name) {
         var sheet = new Sheet(this);
@@ -99,8 +100,6 @@ var Workbook = (function () {
             return _this.sharedStrings.save();
         }).then(function () {
             archive.on('finish', function () {
-                //console.log('finish');
-                //console.log(this.tempDir);
                 rimraf.sync(_this.tempDir);
             });
             archive.pipe(destination);

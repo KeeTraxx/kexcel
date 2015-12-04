@@ -9,12 +9,6 @@ import Workbook = require('./Workbook');
 import Saveable = require('./Saveable');
 import path = require('path');
 
-var parseString: any = Promise.promisify(xml2js.parseString);
-var readFile = Promise.promisify(fs.readFile);
-var fileExists = Promise.promisify(fs.exists);
-var writeFile: any = Promise.promisify(fs.writeFile);
-var builder = new xml2js.Builder();
-
 interface SharedString {
     t?: Array<string>;
     r?: Array<FormattedStrings>;
@@ -46,7 +40,6 @@ class SharedStrings extends Saveable {
                     this.xml = xml;
                 });
             }).finally(() => {
-                var self = this;
                 this.xml.sst.si.forEach((si, index) => {
                     if (si.t) {
                         this.cache[si.t[0]] = index;
@@ -63,7 +56,7 @@ class SharedStrings extends Saveable {
     }
 
     public getString(n: number): string {
-        var sxml: any = this.xml.sst.si[n];
+        var sxml: SharedString = this.xml.sst.si[n];
         if (!sxml) return undefined;
         
         return sxml.hasOwnProperty('t') ? sxml.t[0] : _.compact(sxml.r.map((d) => {

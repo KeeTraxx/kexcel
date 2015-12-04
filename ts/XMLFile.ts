@@ -5,11 +5,6 @@ import * as Util from "./Util";
 import Workbook = require('./Workbook');
 import Saveable = require('./Saveable');
 
-var parseString: any = Promise.promisify(xml2js.parseString);
-var readFile = Promise.promisify(fs.readFile);
-var writeFile: any = Promise.promisify(fs.writeFile);
-var builder = new xml2js.Builder();
-
 class XMLFile extends Saveable {
     public xml: any;
 

@@ -18,7 +18,7 @@ declare class Workbook {
     protected initSharedStrings(): Promise<void>;
     protected initSheets(): Promise<void[]>;
     private extract();
-    getXML(filepath: string): any;
+    getXML(filePath: string): any;
     createSheet(name?: string): Sheet;
     getSheet(index: number): Sheet;
     getSheet(name: string): Sheet;

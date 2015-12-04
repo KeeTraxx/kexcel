@@ -3,18 +3,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var fs = require("fs");
-var xml2js = require("xml2js");
 var Promise = require("bluebird");
 var _ = require("lodash");
 var Util = require("./Util");
 var Saveable = require('./Saveable');
 var path = require('path');
-var parseString = Promise.promisify(xml2js.parseString);
-var readFile = Promise.promisify(fs.readFile);
-var fileExists = Promise.promisify(fs.exists);
-var writeFile = Promise.promisify(fs.writeFile);
-var builder = new xml2js.Builder();
 var Sheet = (function (_super) {
     __extends(Sheet, _super);
     function Sheet(workbook, workbookXml, relationshipXml) {
@@ -134,7 +127,7 @@ var Sheet = (function (_super) {
         if (!row.c)
             return undefined;
         var result = [];
-        row.c.forEach(function (cell, i) {
+        row.c.forEach(function (cell) {
             result[Sheet.excelColumnToInt(cell.$.r) - 1] = _this.getCellValue(cell);
         });
         return result;

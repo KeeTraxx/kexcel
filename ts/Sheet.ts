@@ -11,12 +11,6 @@ import Workbook = require('./Workbook');
 import Saveable = require('./Saveable');
 import path = require('path');
 
-var parseString: any = Promise.promisify(xml2js.parseString);
-var readFile = Promise.promisify(fs.readFile);
-var fileExists = Promise.promisify(fs.exists);
-var writeFile: any = Promise.promisify(fs.writeFile);
-var builder = new xml2js.Builder();
-
 class Sheet extends Saveable {
 
     protected id: string;
@@ -162,7 +156,7 @@ class Sheet extends Saveable {
 
         var result: Array<string | number> = [];
 
-        row.c.forEach((cell, i) => {
+        row.c.forEach((cell) => {
             result[Sheet.excelColumnToInt(cell.$.r) - 1] = this.getCellValue(cell);
         });
         return result;
@@ -230,7 +224,7 @@ class Sheet extends Saveable {
     }
 
     protected addRelationship(): void {
-        var relationships = this.workbook.getXML('xl/_rels/workbook.xml.rels')
+        var relationships = this.workbook.getXML('xl/_rels/workbook.xml.rels');
         this.id = 'rId' + (relationships.Relationships.Relationship.length + 1);
         this.filename = 'worksheets/kexcel_' + this.id + '.xml';
 

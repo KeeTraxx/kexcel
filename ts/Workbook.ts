@@ -58,7 +58,6 @@ class Workbook {
     }
 
     protected initSharedStrings(): Promise<void> {
-        var self = this;
         this.sharedStrings = new SharedStrings(path.join(this.tempDir, 'xl', 'sharedStrings.xml'), this);
         return this.sharedStrings.load();
     }
@@ -86,13 +85,17 @@ class Workbook {
                 if (typeof this.input == 'string') {
                     stream = fs.createReadStream(this.input);
                 }
-                stream.pipe(unzip.Parse()).pipe(fstream.Writer(tempDir)).on('close', () => { resolve(this) });
+                var outstream = stream.pipe(unzip.Parse()).pipe(fstream.Writer(tempDir));
+
+                outstream.on('close', () => { resolve(this) });
+                outstream.on('error', () => reject);
+
             })
         });
     }
 
-    public getXML(filepath: string): any {
-        return this.files[filepath].xml;
+    public getXML(filePath: string): any {
+        return this.files[filePath].xml;
     }
 
     public createSheet(name?: string): Sheet {
@@ -124,15 +127,11 @@ class Workbook {
             return this.sharedStrings.save();
         }).then(() => {
             archive.on('finish', () => {
-                //console.log('finish');
-                //console.log(this.tempDir);
-                
                 // Async version somehow doesn't work?
                 /*rimraf(this.tempDir, function(error){
                     console.log('errr');
                     console.log(error);
                 });*/
-                
                 rimraf.sync(this.tempDir);
             });
             archive.pipe(destination);
