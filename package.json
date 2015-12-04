@@ -2,11 +2,21 @@
   "name": "kexcel",
   "version": "3.0.0",
   "description": "Create or open and then edit existing XLSX files",
+  "keywords": [
+    "xlsx",
+    "excel",
+    "spreadsheet"
+  ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/npm/npm.git"
+  },
   "main": "js/Workbook.js",
   "author": {
     "name": "Khôi Tran",
-    "email": "kt@compile.ch"
+    "email": "kt@compile.ch",
+    "url": "http://tran-engineering.ch"
   },
   "dependencies": {
     "archiver": "^0.20.0",
@@ -31,11 +41,13 @@
   "scripts": {
     "build": "tsc",
     "test": "mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js",
-    "localtest": "mocha"
+    "localtest": "tsc && mocha"
   },
   "config": {
     "blanket": {
-      "pattern": ["js"],
+      "pattern": [
+        "js"
+      ],
       "data-cover-never": [
         "node_modules",
         "tests"

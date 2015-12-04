@@ -106,13 +106,13 @@ class Workbook {
         return sheet;
     }
 
-    public getSheetAt(index: number): Sheet {
-        return this.sheets[index];
-    }
-
-    public getSheet(name: string): Sheet {
+    public getSheet(index: number): Sheet;
+    public getSheet(name: string): Sheet;
+    public getSheet(input:any): Sheet {
+        if (typeof input == 'number' ) return this.sheets[input];
+        
         return _.find<Sheet>(this.sheets, sheet => {
-            return sheet.getName() == name;
+            return sheet.getName() == input;
         });
     }
     

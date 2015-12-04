@@ -37,11 +37,11 @@ var Sheet = (function (_super) {
                 return _this.xml = xml;
             });
     };
-    Sheet.prototype.setName = function (name) {
-        this.workbookXml.$.name = name;
-    };
     Sheet.prototype.getName = function () {
         return this.workbookXml.$.name;
+    };
+    Sheet.prototype.setName = function (name) {
+        this.workbookXml.$.name = name;
     };
     Sheet.prototype.create = function () {
         this.addRelationship();
@@ -56,7 +56,7 @@ var Sheet = (function (_super) {
     Sheet.prototype.setCellValue = function (rownum, colnum, cellvalue, copyCellStyle) {
         var cell = this.getCell(rownum, colnum);
         if (cellvalue === undefined || cellvalue === null) {
-            var row = this.getRow(rownum);
+            var row = this.getRowXML(rownum);
             row.c.splice(row.c.indexOf(cell), 1);
         }
         else {
@@ -65,101 +65,6 @@ var Sheet = (function (_super) {
                 cell.$.s = copyCellStyle.$.s;
             }
         }
-    };
-    Sheet.prototype.getCellValueByRef = function (ref) {
-        var matches = ref.match(/^([A-Z]+)(\d+)$/i);
-        return this.getValue(this.getCell(parseInt(matches[2]), Sheet.excelColumnToInt(matches[1])));
-    };
-    Sheet.prototype.getCell = function (rownum, colnum) {
-        var row = this.getRow(rownum);
-        var cellId = Sheet.intToExcelColumn(colnum) + rownum;
-        var cell = _.find(row.c, function (cell) {
-            return cell.$.r == cellId;
-        });
-        if (cell === undefined) {
-            cell = { $: { r: cellId } };
-            row.c = row.c || [];
-            row.c.push(cell);
-            row.c.sort(function (a, b) {
-                return Sheet.excelColumnToInt(a.$.r) - Sheet.excelColumnToInt(b.$.r);
-            });
-        }
-        return cell;
-    };
-    Sheet.prototype.setRowValues = function (rownum, values) {
-        var row = this.getRow(rownum);
-        this.setRow(row, values);
-    };
-    Sheet.prototype.setRow = function (row, values) {
-        var _this = this;
-        var rownum = row.$.r;
-        row.c = _.compact(values.map(function (value, index) {
-            if (!value)
-                return undefined;
-            var cellId = Sheet.intToExcelColumn(index + 1) + rownum;
-            return _this.setValue({ $: { r: cellId } }, value);
-        }));
-    };
-    Sheet.prototype.appendRowValues = function (values) {
-        var row = this.getRow(this.getRowCount() + 1);
-        this.setRow(row, values);
-    };
-    Sheet.prototype.getRowValues = function (rownum) {
-        var row = this.getRow(rownum);
-        return this.getRowData(row);
-    };
-    Sheet.prototype.getRowData = function (row) {
-        var _this = this;
-        if (!row.c)
-            return undefined;
-        var result = [];
-        row.c.forEach(function (cell, i) {
-            result[Sheet.excelColumnToInt(cell.$.r) - 1] = _this.getValue(cell);
-        });
-        return result;
-    };
-    Sheet.prototype.getRowCount = function () {
-        if (this.xml.worksheet.sheetData[0].row) {
-            return _.last(this.xml.worksheet.sheetData[0].row).$.r || 0;
-        }
-        else {
-            return 0;
-        }
-    };
-    Sheet.prototype.getCellValue = function (rownum, colnum) {
-        return this.getValue(this.getCell(rownum, colnum));
-    };
-    Sheet.prototype.getValue = function (cell) {
-        if (cell === undefined || cell === null)
-            return undefined;
-        if (cell.$.t == 's') {
-            return this.workbook.sharedStrings.getString(cell.v[0]);
-        }
-        else if (cell.f && cell.v) {
-            var value = cell.v[0].hasOwnProperty('_') ? cell.v[0]._ : cell.v[0];
-            return (value != '') ? value : undefined;
-        }
-        else if (cell.f) {
-            return '=' + cell.f[0];
-        }
-        else {
-            return cell.hasOwnProperty('v') ? cell.v[0] : undefined;
-        }
-    };
-    Sheet.prototype.getRow = function (rownum) {
-        if (!this.xml.worksheet.sheetData[0]) {
-            this.xml.worksheet.sheetData[0] = { row: [] };
-        }
-        var rows = this.xml.worksheet.sheetData[0].row;
-        var row = _.find(rows, function (r) { return r.$.r == rownum; });
-        if (!row) {
-            row = { $: { r: rownum } };
-            rows.push(row);
-            rows.sort(function (row1, row2) {
-                return row1.$.r - row2.$.r;
-            });
-        }
-        return row;
     };
     Sheet.prototype.setValue = function (cell, cellvalue) {
         if (cellvalue === null || cellvalue === undefined) {
@@ -179,12 +84,108 @@ var Sheet = (function (_super) {
         }
         return cell;
     };
+    Sheet.prototype.getCellValue = function (r, colnum) {
+        var cell = r;
+        if (colnum) {
+            cell = this.getCell(r, colnum);
+        }
+        else if (typeof r == 'string') {
+            var matches = r.match(Sheet.refRegex);
+            cell = this.getCell(parseInt(matches[2]), Sheet.excelColumnToInt(matches[1]));
+        }
+        if (cell === undefined || cell === null)
+            return undefined;
+        if (cell.$.t == 's') {
+            return this.workbook.sharedStrings.getString(cell.v[0]);
+        }
+        else if (cell.f && cell.v) {
+            var value = cell.v[0].hasOwnProperty('_') ? cell.v[0]._ : cell.v[0];
+            return (value != '') ? value : undefined;
+        }
+        else if (cell.f) {
+            return '=' + cell.f[0];
+        }
+        else {
+            return cell.hasOwnProperty('v') ? cell.v[0] : undefined;
+        }
+    };
+    Sheet.prototype.getCell = function (rownum, colnum) {
+        var row = this.getRowXML(rownum);
+        var cellId = Sheet.intToExcelColumn(colnum) + rownum;
+        var cell = _.find(row.c, function (cell) {
+            return cell.$.r == cellId;
+        });
+        if (cell === undefined) {
+            cell = { $: { r: cellId } };
+            row.c = row.c || [];
+            row.c.push(cell);
+            row.c.sort(function (a, b) {
+                return Sheet.excelColumnToInt(a.$.r) - Sheet.excelColumnToInt(b.$.r);
+            });
+        }
+        return cell;
+    };
+    Sheet.prototype.getRow = function (r) {
+        var _this = this;
+        var row = r;
+        if (typeof r == 'number') {
+            row = this.getRowXML(r);
+        }
+        if (!row.c)
+            return undefined;
+        var result = [];
+        row.c.forEach(function (cell, i) {
+            result[Sheet.excelColumnToInt(cell.$.r) - 1] = _this.getCellValue(cell);
+        });
+        return result;
+    };
+    Sheet.prototype.setRow = function (r, values) {
+        var _this = this;
+        var row = r;
+        if (typeof r == 'number') {
+            row = this.getRowXML(r);
+        }
+        var rownum = row.$.r;
+        row.c = _.compact(values.map(function (value, index) {
+            if (!value)
+                return undefined;
+            var cellId = Sheet.intToExcelColumn(index + 1) + rownum;
+            return _this.setValue({ $: { r: cellId } }, value);
+        }));
+    };
+    Sheet.prototype.appendRow = function (values) {
+        var row = this.getRowXML(this.getLastRowNumber() + 1);
+        this.setRow(row, values);
+    };
+    Sheet.prototype.getLastRowNumber = function () {
+        if (this.xml.worksheet.sheetData[0].row) {
+            return _.last(this.xml.worksheet.sheetData[0].row).$.r || 0;
+        }
+        else {
+            return 0;
+        }
+    };
+    Sheet.prototype.getRowXML = function (rownum) {
+        if (!this.xml.worksheet.sheetData[0]) {
+            this.xml.worksheet.sheetData[0] = { row: [] };
+        }
+        var rows = this.xml.worksheet.sheetData[0].row;
+        var row = _.find(rows, function (r) { return r.$.r == rownum; });
+        if (!row) {
+            row = { $: { r: rownum } };
+            rows.push(row);
+            rows.sort(function (row1, row2) {
+                return row1.$.r - row2.$.r;
+            });
+        }
+        return row;
+    };
     Sheet.prototype.toJSON = function () {
         var _this = this;
-        var keys = this.getRowValues(1);
+        var keys = this.getRow(1);
         var rows = this.xml.worksheet.sheetData[0].row.slice(1);
         return rows.map(function (row) {
-            return _.zipObject(keys, _this.getRowData(row));
+            return _.zipObject(keys, _this.getRow(row));
         });
     };
     Sheet.prototype.addRelationship = function () {
@@ -238,6 +239,7 @@ var Sheet = (function (_super) {
         }
         return number;
     };
+    Sheet.refRegex = /^([A-Z]+)(\d+)$/i;
     return Sheet;
 })(Saveable);
 module.exports = Sheet;

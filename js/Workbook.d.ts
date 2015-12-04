@@ -20,7 +20,7 @@ declare class Workbook {
     private extract();
     getXML(filepath: string): any;
     createSheet(name?: string): Sheet;
-    getSheetAt(index: number): Sheet;
+    getSheet(index: number): Sheet;
     getSheet(name: string): Sheet;
     pipe<T extends stream.Writable>(destination: T, options?: {
         end?: boolean;

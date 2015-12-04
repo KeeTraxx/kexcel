@@ -27,13 +27,13 @@ describe('KExcel new instantiation', function () {
 	});
 
 	it('should return an empty workbook (with 1 sheet)', function () {
-		workbook.getSheetAt(0).should.exist;
-		expect(workbook.getSheetAt(1)).to.not.exist;
+		workbook.getSheet(0).should.exist;
+		expect(workbook.getSheet(1)).to.not.exist;
 	});
 
 	it('should have a sheet named "Sheet1"', function () {
-		workbook.getSheetAt(0).should.exist;
-		workbook.getSheetAt(0).getName().should.equal('Sheet1');
+		workbook.getSheet(0).should.exist;
+		workbook.getSheet(0).getName().should.equal('Sheet1');
 	});
 
 	it('should be able to get sheet by name', function () {
@@ -61,31 +61,31 @@ describe('KExcel sheet modification', function () {
 	});
 
 	it('should be able to change the name of the first sheet', function () {
-		workbook.getSheetAt(0).setName('MySheet');
-		workbook.getSheetAt(0).getName().should.equal('MySheet');
+		workbook.getSheet(0).setName('MySheet');
+		workbook.getSheet(0).getName().should.equal('MySheet');
 	});
 
 	it('should be able to set a value in a cell', function () {
-		var sheet = workbook.getSheetAt(0);
+		var sheet = workbook.getSheet(0);
 		sheet.setCellValue(1, 1, 'Hello world!');
 		sheet.getCellValue(1, 1).should.equal('Hello world!');
 		sheet.getCellValue(1, 1).should.have.length(12);
 	});
 
 	it('should be able to set a number in a cell', function () {
-		var sheet = workbook.getSheetAt(0);
+		var sheet = workbook.getSheet(0);
 		sheet.setCellValue(3, 1, 42);
 		sheet.getCellValue(3, 1).should.equal(42);
 	});
 
 	it('should be able to set a formula in a cell', function () {
-		var sheet = workbook.getSheetAt(0);
+		var sheet = workbook.getSheet(0);
 		sheet.setCellValue(2, 1, '=A1');
 		sheet.getCellValue(2, 1).should.equal('=A1');
 	});
 
 	it('should be able to remove the values of a cell', function () {
-		var sheet = workbook.getSheetAt(0);
+		var sheet = workbook.getSheet(0);
 		sheet.setCellValue(4, 1, 'To be removed');
 		sheet.getCellValue(4, 1).should.equal('To be removed');
 		sheet.setCellValue(4, 1, undefined);
@@ -93,9 +93,9 @@ describe('KExcel sheet modification', function () {
 	});
 
 	it('should be able to get a cell value by reference (e.g. "A1")', function () {
-		var sheet = workbook.getSheetAt(0);
-		sheet.getCellValueByRef('A1').should.equal('Hello world!');
-		expect(sheet.getCellValueByRef('Z55')).to.be.undefined;
+		var sheet = workbook.getSheet(0);
+		sheet.getCellValue('A1').should.equal('Hello world!');
+		expect(sheet.getCellValue('Z55')).to.be.undefined;
 	});
 
 	it('should be able to create a new sheet without a name', function () {
@@ -111,7 +111,7 @@ describe('KExcel sheet modification', function () {
 	it('should be able to copy contents from another sheet', function () {
 		var sheet = workbook.getSheet('Sheet2');
 		sheet.copyFrom(workbook.getSheet('MySheet'));
-		sheet.getCellValueByRef('A1').should.equal('Hello world!');
+		sheet.getCellValue('A1').should.equal('Hello world!');
 	});
 
 	it('should deep copy contents', function () {
@@ -123,18 +123,18 @@ describe('KExcel sheet modification', function () {
 
 	it('should be able to set row values', function () {
 		var sheet = workbook.getSheet('FooSheet');
-		sheet.setRowValues(1, [1, 2, '=A1+B1']);
+		sheet.setRow(1, [1, 2, '=A1+B1']);
 	});
 
 	it('should be able to get row values', function () {
 		var sheet = workbook.getSheet('FooSheet');
-		sheet.getRowValues(1).should.be.eql([1, 2, '=A1+B1']);
+		sheet.getRow(1).should.be.eql([1, 2, '=A1+B1']);
 	});
 
 	it('should be able to append row values', function () {
 		var sheet = workbook.getSheet('FooSheet');
-		sheet.appendRowValues(['This', 'is', 'an', 'appended', 'row']);
-		sheet.getRowValues(2).should.be.eql(['This', 'is', 'an', 'appended', 'row']);
+		sheet.appendRow(['This', 'is', 'an', 'appended', 'row']);
+		sheet.getRow(2).should.be.eql(['This', 'is', 'an', 'appended', 'row']);
 	});
 
 	after(function (done) {
@@ -155,10 +155,10 @@ describe('KExcel output possibilites', function () {
 	});
 
 	it('should be able to output JSON', function () {
-		var sheet = workbook.getSheetAt(0);
-		sheet.appendRowValues(['firstname', 'lastname']);
-		sheet.appendRowValues(['Spike', 'Spiegel']);
-		sheet.appendRowValues(['Gandalf', 'The Grey']);
+		var sheet = workbook.getSheet(0);
+		sheet.appendRow(['firstname', 'lastname']);
+		sheet.appendRow(['Spike', 'Spiegel']);
+		sheet.appendRow(['Gandalf', 'The Grey']);
 
 		sheet.toJSON().should.eql([
 			{ firstname: 'Spike', lastname: 'Spiegel' },

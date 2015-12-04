@@ -85,12 +85,11 @@ var Workbook = (function () {
         }
         return sheet;
     };
-    Workbook.prototype.getSheetAt = function (index) {
-        return this.sheets[index];
-    };
-    Workbook.prototype.getSheet = function (name) {
+    Workbook.prototype.getSheet = function (input) {
+        if (typeof input == 'number')
+            return this.sheets[input];
         return _.find(this.sheets, function (sheet) {
-            return sheet.getName() == name;
+            return sheet.getName() == input;
         });
     };
     Workbook.prototype.pipe = function (destination, options) {
