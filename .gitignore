@@ -1,5 +1,5 @@
 .idea
 .vscode
 node_modules
-output-files
 typings
+test/output-files/*.xlsx
