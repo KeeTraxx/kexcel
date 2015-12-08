@@ -40,7 +40,7 @@ var Sheet = (function (_super) {
         this.addRelationship();
         this.addContentType();
         this.addToWorkbook();
-        this.xml = this.workbook.emptySheet.xml;
+        this.xml = _.cloneDeep(this.workbook.emptySheet.xml);
     };
     Sheet.prototype.copyFrom = function (sheet) {
         this.xml = _.cloneDeep(sheet.xml);
@@ -80,8 +80,6 @@ var Sheet = (function (_super) {
     };
     Sheet.prototype.getCellValue = function (r, colnum) {
         var cell = this.getCell(r, colnum);
-        if (cell === undefined || cell === null)
-            return undefined;
         if (cell.$.t == 's') {
             return this.workbook.sharedStrings.getString(cell.v[0]);
         }
@@ -163,9 +161,13 @@ var Sheet = (function (_super) {
     Sheet.prototype.appendRow = function (values) {
         var row = this.getRowXML(this.getLastRowNumber() + 1);
         this.setRow(row, values);
+        return row.$.r;
     };
     Sheet.prototype.getLastRowNumber = function () {
         if (this.xml.worksheet.sheetData[0].row) {
+            this.xml.worksheet.sheetData[0].row = this.xml.worksheet.sheetData[0].row.filter(function (row) {
+                return row.c && row.c.length > 0;
+            });
             return _.last(this.xml.worksheet.sheetData[0].row).$.r || 0;
         }
         else {

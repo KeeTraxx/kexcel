@@ -32,7 +32,7 @@ declare class Sheet extends Saveable {
     getRow(row: K.Row): Array<string | number>;
     setRow(rownum: number, values: Array<string | number>): void;
     setRow(row: K.Row, values: Array<string | number>): void;
-    appendRow(values: Array<string | number>): void;
+    appendRow(values: Array<string | number>): number;
     getLastRowNumber(): number;
     private getRowXML(rownum);
     toJSON(): {};

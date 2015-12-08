@@ -14,7 +14,13 @@ var Workbook = (function () {
     function Workbook(input) {
         this.files = {};
         this.sheets = [];
-        this.source = typeof input == 'string' ? fs.createReadStream(input) : input;
+        if (typeof input == 'string') {
+            this.filename = input;
+            this.source = fs.createReadStream(input);
+        }
+        else {
+            this.source = input;
+        }
     }
     Workbook.new = function () {
         return Workbook.open(path.join(__dirname, '..', 'templates', 'empty.xlsx'));
@@ -60,14 +66,20 @@ var Workbook = (function () {
     };
     Workbook.prototype.extract = function () {
         var _this = this;
+        if (this.filename && !fs.existsSync(this.filename))
+            return Promise.reject(this.filename + ' not found.');
         return mkTempDir('xlsx').then(function (tempDir) {
             _this.tempDir = tempDir;
             return new Promise(function (resolve, reject) {
-                var outstream = _this.source.pipe(unzip.Parse()).pipe(fstream.Writer(tempDir));
+                var parser = unzip.Parse();
+                var writer = fstream.Writer(tempDir);
+                var outstream = _this.source.pipe(parser).pipe(writer);
                 outstream.on('close', function () {
                     resolve(_this);
                 });
-                outstream.on('error', function () { return reject; });
+                parser.on('error', function (error) {
+                    reject(error);
+                });
             });
         });
     };

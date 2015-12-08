@@ -20,7 +20,7 @@ var SharedStrings = (function (_super) {
         return this.xml ?
             Promise.resolve(this.xml) :
             Util.loadXML(this.path).then(function (xml) {
-                _this.xml = xml;
+                return _this.xml = xml;
             }).catch(function () {
                 return Promise.all([
                     _this.addRelationship(),
@@ -49,7 +49,7 @@ var SharedStrings = (function (_super) {
         if (!sxml)
             return undefined;
         return sxml.hasOwnProperty('t') ? sxml.t[0] : _.compact(sxml.r.map(function (d) {
-            return _.isString(d.t[0]) ? d.t[0] : null;
+            return d.t[0];
         })).join('');
     };
     SharedStrings.prototype.storeString = function (s) {

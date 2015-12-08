@@ -31,7 +31,7 @@ class SharedStrings extends Saveable {
         return this.xml ?
             Promise.resolve(this.xml) :
             Util.loadXML(this.path).then(xml => {
-                this.xml = xml;
+                return this.xml = xml;
             }).catch(() => {
                 return Promise.all([
                     this.addRelationship(),
@@ -62,7 +62,7 @@ class SharedStrings extends Saveable {
         if (!sxml) return undefined;
 
         return sxml.hasOwnProperty('t') ? sxml.t[0] : _.compact(sxml.r.map((d) => {
-            return _.isString(d.t[0]) ? d.t[0] : null;
+            return d.t[0];
         })).join('');
     }
 

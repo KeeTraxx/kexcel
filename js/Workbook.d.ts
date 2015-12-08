@@ -10,6 +10,7 @@ declare class Workbook {
     private sheets;
     emptySheet: XMLFile;
     sharedStrings: SharedStrings;
+    private filename;
     protected source: stream.Readable;
     constructor(input: stream.Readable);
     constructor(input: string);

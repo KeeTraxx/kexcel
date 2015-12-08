@@ -1,6 +1,6 @@
 {
   "name": "kexcel",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "Create or open and then edit existing XLSX files",
   "keywords": [
     "xlsx",
@@ -39,6 +39,7 @@
   "scripts": {
     "build": "tsc",
     "test": "istanbul cover _mocha --report lcovonly -- -R spec && remap-istanbul -i coverage/coverage.json -o coverage/coverage-remapped.lcov -t lcovonly && cat ./coverage/coverage-remapped.lcov | coveralls",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && remap-istanbul -i coverage/coverage.json -o coverage/report -t html",
     "localtest": "tsc && mocha"
   },
   "config": {

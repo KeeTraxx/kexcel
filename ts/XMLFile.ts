@@ -14,7 +14,7 @@ class XMLFile extends Saveable {
 
     public load():Promise<void> {
         return this.xml ? Promise.resolve<any>(this.xml) : Util.loadXML(this.path).then(xml => {
-            this.xml = xml;
+            return this.xml = xml;
         });
     }
 

@@ -15,7 +15,7 @@ var XMLFile = (function (_super) {
     XMLFile.prototype.load = function () {
         var _this = this;
         return this.xml ? Promise.resolve(this.xml) : Util.loadXML(this.path).then(function (xml) {
-            _this.xml = xml;
+            return _this.xml = xml;
         });
     };
     return XMLFile;

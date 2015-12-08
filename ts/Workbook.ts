@@ -27,13 +27,19 @@ class Workbook {
     private sheets:Array<Sheet> = [];
     public emptySheet:XMLFile;
     public sharedStrings:SharedStrings;
+    private filename:string;
 
     protected source:stream.Readable;
 
     constructor(input:stream.Readable);
     constructor(input:string);
     constructor(input:any) {
-        this.source = typeof input == 'string' ? fs.createReadStream(input) : input;
+        if (typeof input == 'string') {
+            this.filename = input;
+            this.source = fs.createReadStream(input);
+        } else {
+            this.source = input;
+        }
     }
 
     public static new():Promise<Workbook> {
@@ -83,17 +89,23 @@ class Workbook {
     }
 
     private extract():Promise<void> {
+        if ( this.filename && !fs.existsSync(this.filename)) return Promise.reject(this.filename + ' not found.');
         return mkTempDir('xlsx').then(tempDir => {
             this.tempDir = tempDir;
             return new Promise((resolve, reject) => {
-                var outstream = this.source.pipe(unzip.Parse()).pipe(fstream.Writer(tempDir));
+                var parser = unzip.Parse();
+                var writer = fstream.Writer(tempDir);
+                var outstream = this.source.pipe(parser).pipe(writer);
 
                 outstream.on('close', () => {
-                    resolve(this)
+                    resolve(this);
                 });
-                outstream.on('error', () => reject);
 
-            })
+                parser.on('error', error => {
+                    reject(error);
+                });
+
+            });
         });
     }
 

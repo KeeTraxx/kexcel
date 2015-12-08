@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="4" uniqueCount="4">
+    <si>
+        <t>Hello</t>
+    </si>
+    <si>
+        <t>World</t>
+    </si>
+    <si>
+        <t>Trailing white spaces</t>
+    </si>
+    <si>
+        <r>
+            <rPr>
+                <b val="true"/>
+                <sz val="11"/>
+                <color rgb="FF000000"/>
+                <rFont val="Calibri"/>
+                <family val="2"/>
+                <charset val="1"/>
+            </rPr>
+            <t>Formatted</t>
+        </r>
+        <r>
+            <rPr>
+                <b val="true"/>
+                <sz val="11"/>
+                <color rgb="FF000000"/>
+                <rFont val="Calibri"/>
+                <family val="2"/>
+                <charset val="1"/>
+            </rPr>
+            <t>Text</t>
+        </r>
+        <r>
+            <rPr>
+                <b val="true"/>
+                <sz val="11"/>
+                <color rgb="FF000000"/>
+                <rFont val="Calibri"/>
+                <family val="2"/>
+                <charset val="1"/>
+            </rPr>
+        </r>
+    </si>
+</sst>

@@ -48,7 +48,7 @@ class Sheet extends Saveable {
         this.addRelationship();
         this.addContentType();
         this.addToWorkbook();
-        this.xml = this.workbook.emptySheet.xml;
+        this.xml = _.cloneDeep(this.workbook.emptySheet.xml);
     }
 
     public copyFrom(sheet:Sheet) {
@@ -103,7 +103,6 @@ class Sheet extends Saveable {
     public getCellValue(cell:K.Cell):string | number;
     public getCellValue(r:any, colnum?:number):string | number {
         var cell:K.Cell = this.getCell(r,colnum);
-        if (cell === undefined || cell === null) return undefined;
 
         if (cell.$.t == 's') {
             // Sharedstring
@@ -203,14 +202,19 @@ class Sheet extends Saveable {
 
     }
 
-    public appendRow(values:Array<string | number>):void {
+    public appendRow(values:Array<string | number>):number {
         var row:K.Row = this.getRowXML(this.getLastRowNumber() + 1);
         this.setRow(row, values);
+        return row.$.r;
     }
 
 
     public getLastRowNumber():number {
         if (this.xml.worksheet.sheetData[0].row) {
+            // Remove empty rows
+            this.xml.worksheet.sheetData[0].row = this.xml.worksheet.sheetData[0].row.filter(function(row){
+                return row.c && row.c.length > 0;
+            });
             return _.last<K.Row>(this.xml.worksheet.sheetData[0].row).$.r || 0;
         } else {
             return 0;
