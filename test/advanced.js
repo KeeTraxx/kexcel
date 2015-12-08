@@ -29,11 +29,20 @@ describe('Modify an existing .xlsx sheet', function () {
     });
 
     it('should return the cell function', function(){
+        var bla = workbook.getSheet(0).getCellFunction('D1');
         workbook.getSheet(0).getCellFunction('D1').should.equal('=18+24');
     });
 
     it('should return undefined', function(){
-        expect(workbook.getSheet(0).getCellFunction('D2')).to.be.undefined;
+        expect(workbook.getSheet(0).getCellFunction('D24')).to.be.undefined;
+    });
+
+    it('should be able to handle trailing white spaces', function(){
+        workbook.getSheet(0).getCellValue('D2').should.equal('Trailing white spaces    ');
+    });
+
+    it('should be able to handle libre office text formats', function(){
+        workbook.getSheet(0).getCellValue('D3').should.equal('Formatted Text');
     });
 
 	after(function (done) {

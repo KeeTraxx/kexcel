@@ -123,9 +123,11 @@ class Sheet extends Saveable {
     public getCellFunction(cell:K.Cell):string | number;
     public getCellFunction(r:any, colnum?:number):string {
         var cell:K.Cell = this.getCell(r,colnum);
-        if (cell === undefined || cell === null) return undefined;
+        if (cell === undefined || cell === null || !cell.f) return undefined;
 
-        return  cell.f ? '=' + cell.f[0] : undefined;
+        var func = cell.f[0].hasOwnProperty('_') ? cell.f[0]._ : cell.f[0];
+
+        return  '=' + func;
     }
 
     private getCell(rownum:number, colnum:number);

@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Promise = require("bluebird");
+var _ = require("lodash");
 var Util = require("./Util");
 var Saveable = require('./Saveable');
 var SharedStrings = (function (_super) {
@@ -49,7 +50,7 @@ var SharedStrings = (function (_super) {
             return undefined;
         return sxml.hasOwnProperty('t') ? sxml.t[0] : _.compact(sxml.r.map(function (d) {
             return _.isString(d.t[0]) ? d.t[0] : null;
-        })).join(' ');
+        })).join('');
     };
     SharedStrings.prototype.storeString = function (s) {
         var index = this.xml.sst.si.push({ t: [s] }) - 1;

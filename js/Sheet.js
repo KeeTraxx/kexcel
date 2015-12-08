@@ -98,9 +98,10 @@ var Sheet = (function (_super) {
     };
     Sheet.prototype.getCellFunction = function (r, colnum) {
         var cell = this.getCell(r, colnum);
-        if (cell === undefined || cell === null)
+        if (cell === undefined || cell === null || !cell.f)
             return undefined;
-        return cell.f ? '=' + cell.f[0] : undefined;
+        var func = cell.f[0].hasOwnProperty('_') ? cell.f[0]._ : cell.f[0];
+        return '=' + func;
     };
     Sheet.prototype.getCell = function (rownum_or_ref, colnum) {
         var rownum;

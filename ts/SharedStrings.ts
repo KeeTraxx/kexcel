@@ -1,6 +1,7 @@
 ﻿import * as fs from "fs";
 import * as xml2js from "xml2js";
 import * as Promise from "bluebird";
+import * as _ from "lodash";
 
 import * as Util from "./Util";
 
@@ -62,7 +63,7 @@ class SharedStrings extends Saveable {
 
         return sxml.hasOwnProperty('t') ? sxml.t[0] : _.compact(sxml.r.map((d) => {
             return _.isString(d.t[0]) ? d.t[0] : null;
-        })).join(' ');
+        })).join('');
     }
 
     private storeString(s):number {
