@@ -38,7 +38,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && remap-istanbul -i coverage/coverage.json -o coverage/coverage-remapped.lcov -t lcovonly && cat ./coverage/coverage-remapped.lcov | coveralls",
+    "test": "istanbul cover _mocha --report lcovonly -- -R spec && remap-istanbul -i coverage/coverage.json -o coverage/coverage-remapped.lcov -t lcovonly && cat ./coverage/coverage-remapped.lcov | coveralls",
     "localtest": "tsc && mocha"
   },
   "config": {
