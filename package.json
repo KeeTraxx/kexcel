@@ -33,11 +33,12 @@
     "chai": "^3.4.1",
     "coveralls": "^2.11.4",
     "istanbul": "^0.4.1",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "remap-istanbul": "^0.4.0"
   },
   "scripts": {
     "build": "tsc",
-    "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && remap-istanbul -i coverage/coverage.json -t lcovonly | ./node_modules/coveralls/.bin/coveralls",
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && remap-istanbul -i coverage/coverage.json -t lcovonly | ./node_modules/.bin/coveralls",
     "localtest": "tsc && mocha"
   },
   "config": {
