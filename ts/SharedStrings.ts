@@ -19,18 +19,19 @@ interface FormattedStrings {
 }
 
 class SharedStrings extends Saveable {
-    public xml: any;
-    private cache: { [s: string]: number; } = {};
-    constructor(protected path: string, protected workbook: Workbook) {
+    public xml:any;
+    private cache:{ [s: string]: number; } = {};
+
+    constructor(protected path:string, protected workbook:Workbook) {
         super(path);
     }
 
-    public load(): Promise<any> {
+    public load():Promise<any> {
         return this.xml ?
             Promise.resolve(this.xml) :
             Util.loadXML(this.path).then(xml => {
                 this.xml = xml;
-            }).catch(err => {
+            }).catch(() => {
                 return Promise.all([
                     this.addRelationship(),
                     this.addContentType()
@@ -51,26 +52,26 @@ class SharedStrings extends Saveable {
             });
     }
 
-    public getIndex(s: string): number {
+    public getIndex(s:string):number {
         return this.cache[s] || this.storeString(s);
     }
 
-    public getString(n: number): string {
-        var sxml: SharedString = this.xml.sst.si[n];
+    public getString(n:number):string {
+        var sxml:SharedString = this.xml.sst.si[n];
         if (!sxml) return undefined;
-        
+
         return sxml.hasOwnProperty('t') ? sxml.t[0] : _.compact(sxml.r.map((d) => {
             return _.isString(d.t[0]) ? d.t[0] : null;
         })).join(' ');
     }
 
-    private storeString(s): number {
-        var index = this.xml.sst.si.push({ t: [s] }) - 1;
+    private storeString(s):number {
+        var index = this.xml.sst.si.push({t: [s]}) - 1;
         this.cache[s] = index;
         return index;
     }
 
-    protected addRelationship(): void {
+    protected addRelationship():void {
         var relationships = this.workbook.getXML('xl/_rels/workbook.xml.rels');
         relationships.Relationships.Relationship.push({
             '$': {
@@ -81,7 +82,7 @@ class SharedStrings extends Saveable {
         });
     }
 
-    protected addContentType(): void {
+    protected addContentType():void {
         var contentTypes = this.workbook.getXML('[Content_Types].xml');
         contentTypes.Types.Override.push({
             '$': {

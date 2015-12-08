@@ -20,7 +20,7 @@ var SharedStrings = (function (_super) {
             Promise.resolve(this.xml) :
             Util.loadXML(this.path).then(function (xml) {
                 _this.xml = xml;
-            }).catch(function (err) {
+            }).catch(function () {
                 return Promise.all([
                     _this.addRelationship(),
                     _this.addContentType()

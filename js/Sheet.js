@@ -163,7 +163,9 @@ var Sheet = (function (_super) {
             this.xml.worksheet.sheetData[0] = { row: [] };
         }
         var rows = this.xml.worksheet.sheetData[0].row;
-        var row = _.find(rows, function (r) { return r.$.r == rownum; });
+        var row = _.find(rows, function (r) {
+            return r.$.r == rownum;
+        });
         if (!row) {
             row = { $: { r: rownum } };
             rows.push(row);

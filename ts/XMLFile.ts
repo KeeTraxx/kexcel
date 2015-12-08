@@ -6,13 +6,13 @@ import Workbook = require('./Workbook');
 import Saveable = require('./Saveable');
 
 class XMLFile extends Saveable {
-    public xml: any;
+    public xml:any;
 
-    constructor(protected path: string) {
+    constructor(protected path:string) {
         super(path);
     }
 
-    public load(): Promise<void> {
+    public load():Promise<void> {
         return this.xml ? Promise.resolve<any>(this.xml) : Util.loadXML(this.path).then(xml => {
             this.xml = xml;
         });

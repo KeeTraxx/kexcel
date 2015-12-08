@@ -13,12 +13,12 @@ import path = require('path');
 
 class Sheet extends Saveable {
 
-    protected id: string;
-    public xml: any;
-    public filename: string;
-    private static refRegex: RegExp = /^([A-Z]+)(\d+)$/i;
+    protected id:string;
+    public xml:any;
+    public filename:string;
+    private static refRegex:RegExp = /^([A-Z]+)(\d+)$/i;
 
-    constructor(protected workbook: Workbook, protected workbookXml?: any, protected relationshipXml?: any) {
+    constructor(protected workbook:Workbook, protected workbookXml?:any, protected relationshipXml?:any) {
         super(null);
         if (this.workbookXml) {
             this.filename = this.relationshipXml.$.Target;
@@ -27,7 +27,7 @@ class Sheet extends Saveable {
         }
     }
 
-    public load(): Promise<any> {
+    public load():Promise<any> {
         return this.xml ?
             Promise.resolve<any>(this.xml) :
             Util.loadXML(this.path)
@@ -36,32 +36,32 @@ class Sheet extends Saveable {
                 });
     }
 
-    public getName(): string {
+    public getName():string {
         return this.workbookXml.$.name;
     }
 
-    public setName(name: string): void {
+    public setName(name:string):void {
         this.workbookXml.$.name = name;
     }
 
-    public create(): void {
+    public create():void {
         this.addRelationship();
         this.addContentType();
         this.addToWorkbook();
         this.xml = this.workbook.emptySheet.xml;
     }
 
-    public copyFrom(sheet: Sheet) {
+    public copyFrom(sheet:Sheet) {
         this.xml = _.cloneDeep(sheet.xml);
         // delete selections if any
         delete this.xml.worksheet.sheetViews;
     }
 
-    public setCellValue(rownum: number, colnum: number, cellvalue: any, copyCellStyle?: K.Cell): void {
+    public setCellValue(rownum:number, colnum:number, cellvalue:any, copyCellStyle?:K.Cell):void {
         var cell = this.getCell(rownum, colnum);
         if (cellvalue === undefined || cellvalue === null) {
             // delete cell
-            var row: K.Row = this.getRowXML(rownum);
+            var row:K.Row = this.getRowXML(rownum);
             row.c.splice(row.c.indexOf(cell), 1);
         } else {
             this.setValue(cell, cellvalue);
@@ -70,9 +70,9 @@ class Sheet extends Saveable {
             }
         }
     }
-    
 
-    private setValue(cell: K.Cell, cellvalue: any): K.Cell {
+
+    private setValue(cell:K.Cell, cellvalue:any):K.Cell {
         if (cellvalue === null || cellvalue === undefined) {
             return;
         }
@@ -95,11 +95,11 @@ class Sheet extends Saveable {
         return cell;
     }
 
-    public getCellValue(rownum: number, colnum: number): string | number;
-    public getCellValue(ref: string): string | number;
-    public getCellValue(cell: K.Cell): string | number;
-    public getCellValue(r: any, colnum?: number): string | number {
-        var cell: K.Cell = r;
+    public getCellValue(rownum:number, colnum:number):string | number;
+    public getCellValue(ref:string):string | number;
+    public getCellValue(cell:K.Cell):string | number;
+    public getCellValue(r:any, colnum?:number):string | number {
+        var cell:K.Cell = r;
         if (colnum) {
             cell = this.getCell(r, colnum);
         } else if (typeof r == 'string') {
@@ -123,16 +123,16 @@ class Sheet extends Saveable {
 
     }
 
-    private getCell(rownum: number, colnum: number): K.Cell {
-        var row: K.Row = this.getRowXML(rownum);
-        var cellId: string = Sheet.intToExcelColumn(colnum) + rownum;
+    private getCell(rownum:number, colnum:number):K.Cell {
+        var row:K.Row = this.getRowXML(rownum);
+        var cellId:string = Sheet.intToExcelColumn(colnum) + rownum;
 
         var cell = _.find(row.c, cell => {
             return cell.$.r == cellId;
         });
 
         if (cell === undefined) {
-            cell = { $: { r: cellId } };
+            cell = {$: {r: cellId}};
             row.c = row.c || [];
             row.c.push(cell);
 
@@ -143,18 +143,18 @@ class Sheet extends Saveable {
 
         return cell;
     }
-    
-    public getRow(rownum: number): Array<string | number>;
-    public getRow(row: K.Row): Array<string | number>
-    public getRow(r: any): Array<string | number> {
-        var row: K.Row = r;
+
+    public getRow(rownum:number):Array<string | number>;
+    public getRow(row:K.Row):Array<string | number>
+    public getRow(r:any):Array<string | number> {
+        var row:K.Row = r;
         if (typeof r == 'number') {
             row = this.getRowXML(r);
         }
 
         if (!row.c) return undefined;
 
-        var result: Array<string | number> = [];
+        var result:Array<string | number> = [];
 
         row.c.forEach((cell) => {
             result[Sheet.excelColumnToInt(cell.$.r) - 1] = this.getCellValue(cell);
@@ -163,10 +163,10 @@ class Sheet extends Saveable {
 
     }
 
-    public setRow(rownum: number, values: Array<string | number>): void;
-    public setRow(row: K.Row, values: Array<string | number>): void;
-    public setRow(r: any, values: Array<string | number>): void {
-        var row: K.Row = r;
+    public setRow(rownum:number, values:Array<string | number>):void;
+    public setRow(row:K.Row, values:Array<string | number>):void;
+    public setRow(r:any, values:Array<string | number>):void {
+        var row:K.Row = r;
         if (typeof r == 'number') {
             row = this.getRowXML(r);
         }
@@ -176,18 +176,18 @@ class Sheet extends Saveable {
         row.c = _.compact(values.map((value, index) => {
             if (!value) return undefined;
             var cellId = Sheet.intToExcelColumn(index + 1) + rownum;
-            return this.setValue({ $: { r: cellId } }, value);
+            return this.setValue({$: {r: cellId}}, value);
         }));
 
     }
 
-    public appendRow(values: Array<string | number>): void {
-        var row: K.Row = this.getRowXML(this.getLastRowNumber() + 1);
+    public appendRow(values:Array<string | number>):void {
+        var row:K.Row = this.getRowXML(this.getLastRowNumber() + 1);
         this.setRow(row, values);
     }
 
 
-    public getLastRowNumber(): number {
+    public getLastRowNumber():number {
         if (this.xml.worksheet.sheetData[0].row) {
             return _.last<K.Row>(this.xml.worksheet.sheetData[0].row).$.r || 0;
         } else {
@@ -196,15 +196,17 @@ class Sheet extends Saveable {
 
     }
 
-    private getRowXML(rownum: number): K.Row {
+    private getRowXML(rownum:number):K.Row {
         if (!this.xml.worksheet.sheetData[0]) {
-            this.xml.worksheet.sheetData[0] = { row: [] };
+            this.xml.worksheet.sheetData[0] = {row: []};
         }
-        var rows: Array<K.Row> = this.xml.worksheet.sheetData[0].row;
-        var row: K.Row = _.find<K.Row>(rows, r => { return r.$.r == rownum });
+        var rows:Array<K.Row> = this.xml.worksheet.sheetData[0].row;
+        var row:K.Row = _.find<K.Row>(rows, r => {
+            return r.$.r == rownum
+        });
 
         if (!row) {
-            row = { $: { r: rownum } };
+            row = {$: {r: rownum}};
             rows.push(row);
             rows.sort((row1, row2) => {
                 return row1.$.r - row2.$.r;
@@ -215,15 +217,15 @@ class Sheet extends Saveable {
 
     }
 
-    public toJSON(): {} {
-        var keys: Array<string | number> = this.getRow(1);
-        var rows: Array<K.Row> = this.xml.worksheet.sheetData[0].row.slice(1);
+    public toJSON():{} {
+        var keys:Array<string | number> = this.getRow(1);
+        var rows:Array<K.Row> = this.xml.worksheet.sheetData[0].row.slice(1);
         return rows.map(row => {
             return _.zipObject(keys, this.getRow(row));
         });
     }
 
-    protected addRelationship(): void {
+    protected addRelationship():void {
         var relationships = this.workbook.getXML('xl/_rels/workbook.xml.rels');
         this.id = 'rId' + (relationships.Relationships.Relationship.length + 1);
         this.filename = 'worksheets/kexcel_' + this.id + '.xml';
@@ -239,7 +241,7 @@ class Sheet extends Saveable {
 
     }
 
-    protected addContentType(): void {
+    protected addContentType():void {
         var contentTypes = this.workbook.getXML('[Content_Types].xml');
         this.path = path.join(this.workbook.tempDir, 'xl', 'worksheets', 'kexcel_' + this.id + '.xml');
         contentTypes.Types.Override.push({
@@ -250,14 +252,14 @@ class Sheet extends Saveable {
         });
     }
 
-    protected addToWorkbook(): void {
+    protected addToWorkbook():void {
         var wbxml = this.workbook.getXML('xl/workbook.xml');
         var sheets = wbxml.workbook.sheets[0].sheet;
-        this.workbookXml = { '$': { name: 'Sheet' + (sheets.length + 1), sheetId: sheets.length + 1, 'r:id': this.id } };
+        this.workbookXml = {'$': {name: 'Sheet' + (sheets.length + 1), sheetId: sheets.length + 1, 'r:id': this.id}};
         sheets.push(this.workbookXml);
     }
 
-    public static intToExcelColumn(col: number): string {
+    public static intToExcelColumn(col:number):string {
         var result = '';
 
         var mod;
@@ -271,7 +273,7 @@ class Sheet extends Saveable {
         return result;
     }
 
-    public static excelColumnToInt(ref: string): number {
+    public static excelColumnToInt(ref:string):number {
         var number = 0;
         var pow = 1;
         for (var i = ref.length - 1; i >= 0; i--) {
