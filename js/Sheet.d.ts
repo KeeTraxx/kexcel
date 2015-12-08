@@ -22,6 +22,9 @@ declare class Sheet extends Saveable {
     getCellValue(rownum: number, colnum: number): string | number;
     getCellValue(ref: string): string | number;
     getCellValue(cell: K.Cell): string | number;
+    getCellFunction(rownum: number, colnum: number): string | number;
+    getCellFunction(ref: string): string | number;
+    getCellFunction(cell: K.Cell): string | number;
     private getCell(rownum, colnum);
     private getCell(ref);
     private getCell(cell);

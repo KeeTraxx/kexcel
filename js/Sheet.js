@@ -96,6 +96,12 @@ var Sheet = (function (_super) {
             return cell.hasOwnProperty('v') ? cell.v[0] : undefined;
         }
     };
+    Sheet.prototype.getCellFunction = function (r, colnum) {
+        var cell = this.getCell(r, colnum);
+        if (cell === undefined || cell === null)
+            return undefined;
+        return cell.f ? '=' + cell.f[0] : undefined;
+    };
     Sheet.prototype.getCell = function (rownum_or_ref, colnum) {
         var rownum;
         var cellId;

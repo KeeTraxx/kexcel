@@ -9,7 +9,7 @@ var kexcel = require('..');
 
 var devnull = require('dev-null');
 
-describe('KExcel open an existing .xlsx sheet', function () {
+describe('Modify an existing .xlsx sheet', function () {
 	var workbook;
 
 	before(function (done) {
@@ -22,6 +22,18 @@ describe('KExcel open an existing .xlsx sheet', function () {
     it('should have Hello World in it.', function(){
         workbook.getSheet(0).getCellValue(1,1).should.equal('Hello');
         workbook.getSheet(0).getCellValue(1,2).should.equal('World');
+    });
+
+    it('should return a computed / calculated value', function(){
+        workbook.getSheet(0).getCellValue('D1').should.equal('42');
+    });
+
+    it('should return the cell function', function(){
+        workbook.getSheet(0).getCellFunction('D1').should.equal('=18+24');
+    });
+
+    it('should return undefined', function(){
+        expect(workbook.getSheet(0).getCellFunction('D2')).to.be.undefined;
     });
 
 	after(function (done) {

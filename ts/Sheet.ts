@@ -116,7 +116,16 @@ class Sheet extends Saveable {
         } else {
             return cell.hasOwnProperty('v') ? cell.v[0] : undefined;
         }
+    }
 
+    public getCellFunction(rownum:number, colnum:number):string | number;
+    public getCellFunction(ref:string):string | number;
+    public getCellFunction(cell:K.Cell):string | number;
+    public getCellFunction(r:any, colnum?:number):string {
+        var cell:K.Cell = this.getCell(r,colnum);
+        if (cell === undefined || cell === null) return undefined;
+
+        return  cell.f ? '=' + cell.f[0] : undefined;
     }
 
     private getCell(rownum:number, colnum:number);
