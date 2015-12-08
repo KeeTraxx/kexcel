@@ -16,12 +16,15 @@ declare class Sheet extends Saveable {
     setName(name: string): void;
     create(): void;
     copyFrom(sheet: Sheet): void;
-    setCellValue(rownum: number, colnum: number, cellvalue: any, copyCellStyle?: K.Cell): void;
+    setCellValue(rownum: number, colnum: number, cellvalue: string | number, copyCellStyle?: string): any;
+    setCellValue(ref: string, cellvalue: string | number, copyCellStyle?: string): any;
     private setValue(cell, cellvalue);
     getCellValue(rownum: number, colnum: number): string | number;
     getCellValue(ref: string): string | number;
     getCellValue(cell: K.Cell): string | number;
     private getCell(rownum, colnum);
+    private getCell(ref);
+    private getCell(cell);
     getRow(rownum: number): Array<string | number>;
     getRow(row: K.Row): Array<string | number>;
     setRow(rownum: number, values: Array<string | number>): void;

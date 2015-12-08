@@ -57,25 +57,28 @@ class Sheet extends Saveable {
         delete this.xml.worksheet.sheetViews;
     }
 
-    public setCellValue(rownum:number, colnum:number, cellvalue:any, copyCellStyle?:K.Cell):void {
-        var cell = this.getCell(rownum, colnum);
+    public setCellValue(rownum:number, colnum:number, cellvalue:string | number, copyCellStyle?:string);
+    public setCellValue(ref:string, cellvalue:string | number, copyCellStyle?:string);
+    public setCellValue(rownum_or_ref:any, colnum:number, cellvalue:string | number, copyCellStyle?:string):void {
+        var cell = this.getCell(rownum_or_ref, colnum);
+        var value:string|number = typeof colnum == 'string' ? colnum : cellvalue;
+        var from:any = typeof colnum == 'string' ? cellvalue : copyCellStyle;
         if (cellvalue === undefined || cellvalue === null) {
+            var matches = cell.$.r.match(Sheet.refRegex);
+            var rownum = parseInt( matches[2] );
             // delete cell
             var row:K.Row = this.getRowXML(rownum);
             row.c.splice(row.c.indexOf(cell), 1);
         } else {
-            this.setValue(cell, cellvalue);
-            if (copyCellStyle !== undefined) {
-                cell.$.s = copyCellStyle.$.s;
+            this.setValue(cell, value);
+            if (from !== undefined) {
+                cell.$.s = this.getCell(from).$.s;
             }
         }
     }
 
 
     private setValue(cell:K.Cell, cellvalue:any):K.Cell {
-        if (cellvalue === null || cellvalue === undefined) {
-            return;
-        }
 
         if (typeof cellvalue == 'number') {
             // number
@@ -99,14 +102,7 @@ class Sheet extends Saveable {
     public getCellValue(ref:string):string | number;
     public getCellValue(cell:K.Cell):string | number;
     public getCellValue(r:any, colnum?:number):string | number {
-        var cell:K.Cell = r;
-        if (colnum) {
-            cell = this.getCell(r, colnum);
-        } else if (typeof r == 'string') {
-            var matches = r.match(Sheet.refRegex);
-            cell = this.getCell(parseInt(matches[2]), Sheet.excelColumnToInt(matches[1]));
-        }
-
+        var cell:K.Cell = this.getCell(r,colnum);
         if (cell === undefined || cell === null) return undefined;
 
         if (cell.$.t == 's') {
@@ -123,10 +119,25 @@ class Sheet extends Saveable {
 
     }
 
-    private getCell(rownum:number, colnum:number):K.Cell {
+    private getCell(rownum:number, colnum:number);
+    private getCell(ref:string);
+    private getCell(cell:K.Cell);
+    private getCell(rownum_or_ref:any, colnum?:number):K.Cell {
+        var rownum:number;
+        var cellId:string;
+        if (typeof rownum_or_ref == 'string') {
+            var matches = rownum_or_ref.match(Sheet.refRegex);
+            rownum = parseInt( matches[2] );
+            //colnum = Sheet.excelColumnToInt(matches[1]);
+            cellId = rownum_or_ref;
+        } else if (typeof rownum_or_ref == 'number') {
+            rownum = rownum_or_ref;
+            //colnum = colnum;
+            cellId = Sheet.intToExcelColumn(colnum) + rownum;
+        } else {
+            return rownum_or_ref;
+        }
         var row:K.Row = this.getRowXML(rownum);
-        var cellId:string = Sheet.intToExcelColumn(colnum) + rownum;
-
         var cell = _.find(row.c, cell => {
             return cell.$.r == cellId;
         });

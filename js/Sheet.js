@@ -46,23 +46,24 @@ var Sheet = (function (_super) {
         this.xml = _.cloneDeep(sheet.xml);
         delete this.xml.worksheet.sheetViews;
     };
-    Sheet.prototype.setCellValue = function (rownum, colnum, cellvalue, copyCellStyle) {
-        var cell = this.getCell(rownum, colnum);
+    Sheet.prototype.setCellValue = function (rownum_or_ref, colnum, cellvalue, copyCellStyle) {
+        var cell = this.getCell(rownum_or_ref, colnum);
+        var value = typeof colnum == 'string' ? colnum : cellvalue;
+        var from = typeof colnum == 'string' ? cellvalue : copyCellStyle;
         if (cellvalue === undefined || cellvalue === null) {
+            var matches = cell.$.r.match(Sheet.refRegex);
+            var rownum = parseInt(matches[2]);
             var row = this.getRowXML(rownum);
             row.c.splice(row.c.indexOf(cell), 1);
         }
         else {
-            this.setValue(cell, cellvalue);
-            if (copyCellStyle !== undefined) {
-                cell.$.s = copyCellStyle.$.s;
+            this.setValue(cell, value);
+            if (from !== undefined) {
+                cell.$.s = this.getCell(from).$.s;
             }
         }
     };
     Sheet.prototype.setValue = function (cell, cellvalue) {
-        if (cellvalue === null || cellvalue === undefined) {
-            return;
-        }
         if (typeof cellvalue == 'number') {
             cell.v = [cellvalue];
             delete cell.f;
@@ -78,14 +79,7 @@ var Sheet = (function (_super) {
         return cell;
     };
     Sheet.prototype.getCellValue = function (r, colnum) {
-        var cell = r;
-        if (colnum) {
-            cell = this.getCell(r, colnum);
-        }
-        else if (typeof r == 'string') {
-            var matches = r.match(Sheet.refRegex);
-            cell = this.getCell(parseInt(matches[2]), Sheet.excelColumnToInt(matches[1]));
-        }
+        var cell = this.getCell(r, colnum);
         if (cell === undefined || cell === null)
             return undefined;
         if (cell.$.t == 's') {
@@ -102,9 +96,22 @@ var Sheet = (function (_super) {
             return cell.hasOwnProperty('v') ? cell.v[0] : undefined;
         }
     };
-    Sheet.prototype.getCell = function (rownum, colnum) {
+    Sheet.prototype.getCell = function (rownum_or_ref, colnum) {
+        var rownum;
+        var cellId;
+        if (typeof rownum_or_ref == 'string') {
+            var matches = rownum_or_ref.match(Sheet.refRegex);
+            rownum = parseInt(matches[2]);
+            cellId = rownum_or_ref;
+        }
+        else if (typeof rownum_or_ref == 'number') {
+            rownum = rownum_or_ref;
+            cellId = Sheet.intToExcelColumn(colnum) + rownum;
+        }
+        else {
+            return rownum_or_ref;
+        }
         var row = this.getRowXML(rownum);
-        var cellId = Sheet.intToExcelColumn(colnum) + rownum;
         var cell = _.find(row.c, function (cell) {
             return cell.$.r == cellId;
         });
