@@ -12,9 +12,9 @@ var SharedStrings = require("./SharedStrings");
 var Sheet = require("./Sheet");
 var Workbook = (function () {
     function Workbook(input) {
-        this.input = input;
         this.files = {};
         this.sheets = [];
+        this.source = typeof input == 'string' ? fs.createReadStream(input) : input;
     }
     Workbook.new = function () {
         return Workbook.open(path.join(__dirname, '..', 'templates', 'empty.xlsx'));
@@ -25,7 +25,7 @@ var Workbook = (function () {
     };
     Workbook.prototype.init = function () {
         var _this = this;
-        return this.extract().then(function (wb) {
+        return this.extract().then(function () {
             var p = Workbook.autoload.map(function (filepath) {
                 var xmlfile = new XMLFile(path.join(_this.tempDir, filepath));
                 _this.files[filepath] = xmlfile;
@@ -63,12 +63,10 @@ var Workbook = (function () {
         return mkTempDir('xlsx').then(function (tempDir) {
             _this.tempDir = tempDir;
             return new Promise(function (resolve, reject) {
-                var stream = _this.input;
-                if (typeof _this.input == 'string') {
-                    stream = fs.createReadStream(_this.input);
-                }
-                var outstream = stream.pipe(unzip.Parse()).pipe(fstream.Writer(tempDir));
-                outstream.on('close', function () { resolve(_this); });
+                var outstream = _this.source.pipe(unzip.Parse()).pipe(fstream.Writer(tempDir));
+                outstream.on('close', function () {
+                    resolve(_this);
+                });
                 outstream.on('error', function () { return reject; });
             });
         });
@@ -96,13 +94,15 @@ var Workbook = (function () {
     Workbook.prototype.pipe = function (destination, options) {
         var _this = this;
         var archive = archiver('zip');
-        Promise.all(_.map(this.files, function (file) { return file.save(); })).then(function () {
+        Promise.all(_.map(this.files, function (file) {
+            return file.save();
+        })).then(function () {
             return _this.sharedStrings.save();
         }).then(function () {
             archive.on('finish', function () {
                 rimraf.sync(_this.tempDir);
             });
-            archive.pipe(destination);
+            archive.pipe(destination, options);
             archive.bulk([
                 { expand: true, cwd: _this.tempDir, src: ['**', '_rels/.rels'], data: { date: new Date() } }
             ]);
