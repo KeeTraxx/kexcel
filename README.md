@@ -7,6 +7,9 @@ Manipulate .xlsx files - easy.
 
 ## Notes and information
 
+## Installation
+    npm install kexcel --save
+
 ### What KExcel supports
  * Reading .xlsx files from a file or a stream
  * Pure javascript, works on all operating systems.
