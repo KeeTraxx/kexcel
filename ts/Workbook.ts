@@ -28,7 +28,12 @@ class Workbook {
     public emptySheet: XMLFile;
     public sharedStrings: SharedStrings;
 
-    constructor(protected input: any) {
+    protected source:stream.Readable;
+
+    constructor(input: stream.Readable);
+    constructor(input: string);
+    constructor(input: any) {
+        this.source = typeof input == 'string' ? fs.createReadStream(input) : input;
     }
 
     public static new(): Promise<Workbook> {
@@ -41,7 +46,7 @@ class Workbook {
     }
 
     protected init(): Promise<Workbook> {
-        return this.extract().then(wb => {
+        return this.extract().then(() => {
             var p: Array<Promise<void>> = Workbook.autoload.map(filepath => {
                 var xmlfile = new XMLFile(path.join(this.tempDir, filepath));
                 this.files[filepath] = xmlfile;
@@ -81,11 +86,7 @@ class Workbook {
         return mkTempDir('xlsx').then(tempDir => {
             this.tempDir = tempDir;
             return new Promise((resolve, reject) => {
-                var stream: stream.Readable = this.input;
-                if (typeof this.input == 'string') {
-                    stream = fs.createReadStream(this.input);
-                }
-                var outstream = stream.pipe(unzip.Parse()).pipe(fstream.Writer(tempDir));
+                var outstream = this.source.pipe(unzip.Parse()).pipe(fstream.Writer(tempDir));
 
                 outstream.on('close', () => { resolve(this) });
                 outstream.on('error', () => reject);
@@ -118,8 +119,6 @@ class Workbook {
             return sheet.getName() == input;
         });
     }
-    
-    //pipe(destination: T, options?: { end?: boolean; }): T;
 
     public pipe<T extends stream.Writable>(destination: T, options?: { end?: boolean }): T {
         var archive = archiver('zip');
@@ -134,7 +133,7 @@ class Workbook {
                 });*/
                 rimraf.sync(this.tempDir);
             });
-            archive.pipe(destination);
+            archive.pipe(destination, options);
             archive.bulk([
                 { expand: true, cwd: this.tempDir, src: ['**', '_rels/.rels'], data: { date: new Date() } }
             ]);
