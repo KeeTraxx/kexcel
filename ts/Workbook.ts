@@ -16,23 +16,58 @@ import Sheet = require("./Sheet");
 import Saveable = require("./Saveable");
 import Util = require("./Util");
 
+/**
+ * Main class for KExcel. Use .new() and .open(file | stream) to open an .xlsx file.
+ */
 class Workbook {
+
+    /**
+     * These files are automatically loaded into files[]
+     * @type {string[]}
+     */
     private static autoload:Array<string> = [
         'xl/workbook.xml',
         'xl/_rels/workbook.xml.rels',
         '[Content_Types].xml'
     ];
+
+    /**
+     * Temporary directory (created using the 'temp' library)
+     */
     public tempDir:string;
+
+    /**
+     * Dictionary which holds pointers to files.
+     * @type {{}}
+     */
     private files:{ [path: string]: Saveable; } = {};
+
+    /**
+     * The array of sheets in this workbook.
+     * @type {Array}
+     */
     private sheets:Array<Sheet> = [];
+
+    /**
+     * Template for an empty sheet
+     */
     public emptySheet:XMLFile;
+
+    /**
+     * Manage SharedStrings in the workbook.
+     */
     public sharedStrings:SharedStrings;
+
+    /**
+     * Holds the path of the source file (if opened from a file)
+     */
     private filename:string;
 
+    /**
+     * The source stream (from another stream or file)
+     */
     protected source:stream.Readable;
 
-    constructor(input:stream.Readable);
-    constructor(input:string);
     constructor(input:any) {
         if (typeof input == 'string') {
             this.filename = input;
@@ -42,11 +77,20 @@ class Workbook {
         }
     }
 
+    /**
+     * Creates an empty workbook
+     * @returns {Promise<Workbook>}
+     */
     public static new():Promise<Workbook> {
         return Workbook.open(path.join(__dirname, '..', 'templates', 'empty.xlsx'));
     }
 
-    public static open(input:any):Promise<Workbook> {
+    /**
+     * Opens an existing .xlsx file
+     * @param input
+     * @returns {Promise<Workbook>}
+     */
+    public static open(input:stream.Readable | string):Promise<Workbook> {
         var workbook = new Workbook(input);
         return workbook.init();
     }
@@ -109,10 +153,20 @@ class Workbook {
         });
     }
 
+    /**
+     * Returns the xml object for the requested file
+     * @param filePath
+     * @returns {any}
+     */
     public getXML(filePath:string):any {
         return this.files[filePath].xml;
     }
 
+    /**
+     * Creates a new sheet in the workbook
+     * @param name Optionally set the name of the sheet
+     * @returns {Sheet}
+     */
     public createSheet(name?:string):Sheet {
         var sheet = new Sheet(this);
         sheet.create();
@@ -124,6 +178,10 @@ class Workbook {
         return sheet;
     }
 
+    /**
+     * Get sheet at the specified index
+     * @param index
+     */
     public getSheet(index:number):Sheet;
     public getSheet(name:string):Sheet;
     public getSheet(input:any):Sheet {

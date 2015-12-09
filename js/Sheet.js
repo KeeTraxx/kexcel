@@ -44,6 +44,7 @@ var Sheet = (function (_super) {
     };
     Sheet.prototype.copyFrom = function (sheet) {
         this.xml = _.cloneDeep(sheet.xml);
+        // delete selections if any
         delete this.xml.worksheet.sheetViews;
     };
     Sheet.prototype.setCellValue = function (rownum_or_ref, colnum, cellvalue, copyCellStyle) {
@@ -53,6 +54,7 @@ var Sheet = (function (_super) {
         if (cellvalue === undefined || cellvalue === null) {
             var matches = cell.$.r.match(Sheet.refRegex);
             var rownum = parseInt(matches[2]);
+            // delete cell
             var row = this.getRowXML(rownum);
             row.c.splice(row.c.indexOf(cell), 1);
         }
@@ -65,15 +67,19 @@ var Sheet = (function (_super) {
     };
     Sheet.prototype.setValue = function (cell, cellvalue) {
         if (typeof cellvalue == 'number') {
+            // number
             cell.v = [cellvalue];
             delete cell.f;
         }
         else if (cellvalue[0] == '=') {
+            // function
             cell.f = [cellvalue.substr(1).replace(/;/g, ',')];
         }
         else {
+            // assume string
             cell.v = [this.workbook.sharedStrings.getIndex(cellvalue)];
             cell.$.t = 's';
+            // reset cell type
             delete cell.$.s;
         }
         return cell;
@@ -81,6 +87,7 @@ var Sheet = (function (_super) {
     Sheet.prototype.getCellValue = function (r, colnum) {
         var cell = this.getCell(r, colnum);
         if (cell.$.t == 's') {
+            // Sharedstring
             return this.workbook.sharedStrings.getString(cell.v[0]);
         }
         else if (cell.f && cell.v) {
@@ -107,10 +114,12 @@ var Sheet = (function (_super) {
         if (typeof rownum_or_ref == 'string') {
             var matches = rownum_or_ref.match(Sheet.refRegex);
             rownum = parseInt(matches[2]);
+            //colnum = Sheet.excelColumnToInt(matches[1]);
             cellId = rownum_or_ref;
         }
         else if (typeof rownum_or_ref == 'number') {
             rownum = rownum_or_ref;
+            //colnum = colnum;
             cellId = Sheet.intToExcelColumn(colnum) + rownum;
         }
         else {
@@ -165,6 +174,7 @@ var Sheet = (function (_super) {
     };
     Sheet.prototype.getLastRowNumber = function () {
         if (this.xml.worksheet.sheetData[0].row) {
+            // Remove empty rows
             this.xml.worksheet.sheetData[0].row = this.xml.worksheet.sheetData[0].row.filter(function (row) {
                 return row.c && row.c.length > 0;
             });

@@ -10,9 +10,20 @@ var archiver = require('archiver');
 var XMLFile = require("./XMLFile");
 var SharedStrings = require("./SharedStrings");
 var Sheet = require("./Sheet");
+/**
+ * Main class for KExcel. Use .new() and .open(file | stream) to open an .xlsx file.
+ */
 var Workbook = (function () {
     function Workbook(input) {
+        /**
+         * Dictionary which holds pointers to files.
+         * @type {{}}
+         */
         this.files = {};
+        /**
+         * The array of sheets in this workbook.
+         * @type {Array}
+         */
         this.sheets = [];
         if (typeof input == 'string') {
             this.filename = input;
@@ -22,9 +33,18 @@ var Workbook = (function () {
             this.source = input;
         }
     }
+    /**
+     * Creates an empty workbook
+     * @returns {Promise<Workbook>}
+     */
     Workbook.new = function () {
         return Workbook.open(path.join(__dirname, '..', 'templates', 'empty.xlsx'));
     };
+    /**
+     * Opens an existing .xlsx file
+     * @param input
+     * @returns {Promise<Workbook>}
+     */
     Workbook.open = function (input) {
         var workbook = new Workbook(input);
         return workbook.init();
@@ -83,9 +103,19 @@ var Workbook = (function () {
             });
         });
     };
+    /**
+     * Returns the xml object for the requested file
+     * @param filePath
+     * @returns {any}
+     */
     Workbook.prototype.getXML = function (filePath) {
         return this.files[filePath].xml;
     };
+    /**
+     * Creates a new sheet in the workbook
+     * @param name Optionally set the name of the sheet
+     * @returns {Sheet}
+     */
     Workbook.prototype.createSheet = function (name) {
         var sheet = new Sheet(this);
         sheet.create();
@@ -112,6 +142,11 @@ var Workbook = (function () {
             return _this.sharedStrings.save();
         }).then(function () {
             archive.on('finish', function () {
+                // Async version somehow doesn't work?
+                /*rimraf(this.tempDir, function(error){
+                 console.log('errr');
+                 console.log(error);
+                 });*/
                 rimraf.sync(_this.tempDir);
             });
             archive.pipe(destination, options);
@@ -122,6 +157,10 @@ var Workbook = (function () {
         });
         return archive;
     };
+    /**
+     * These files are automatically loaded into files[]
+     * @type {string[]}
+     */
     Workbook.autoload = [
         'xl/workbook.xml',
         'xl/_rels/workbook.xml.rels',
