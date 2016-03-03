@@ -1,6 +1,6 @@
 import * as Util from "./Util";
-
 import Workbook = require('./Workbook');
+import * as Promise from "bluebird";
 
 abstract class Saveable {
 

@@ -1,3 +1,4 @@
+"use strict";
 var Util = require("./Util");
 var Saveable = (function () {
     function Saveable(path) {
@@ -7,6 +8,6 @@ var Saveable = (function () {
         return Util.saveXML(this.xml, this.path);
     };
     return Saveable;
-})();
+}());
 module.exports = Saveable;
 //# sourceMappingURL=Saveable.js.map

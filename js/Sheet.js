@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -265,6 +266,6 @@ var Sheet = (function (_super) {
     };
     Sheet.refRegex = /^([A-Z]+)(\d+)$/i;
     return Sheet;
-})(Saveable);
+}(Saveable));
 module.exports = Sheet;
 //# sourceMappingURL=Sheet.js.map

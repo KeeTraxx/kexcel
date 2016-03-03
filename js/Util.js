@@ -1,3 +1,4 @@
+"use strict";
 var fs = require("fs");
 var xml2js = require("xml2js");
 var Promise = require("bluebird");

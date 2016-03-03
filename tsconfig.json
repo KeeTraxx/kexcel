@@ -1,14 +1,16 @@
 {
-	"compilerOptions": {
-        "module": "commonjs",
-        "noImplicitAny": false,
-        "removeComments": false,
-        "preserveConstEnums": true,
-        "sourceMap": true,
-        "declaration": true,
-        "outDir": "js"
-    },
-	"exclude": [
-    	"node_modules"
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "declaration": false,
+    "outDir": "js"
+  },
+  "exclude": [
+    "node_modules",
+    "typings/browser",
+    "typings/browser.d.ts"
   ]
 }

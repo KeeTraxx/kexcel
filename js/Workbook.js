@@ -1,3 +1,4 @@
+"use strict";
 var fs = require("fs");
 var Promise = require("bluebird");
 var path = require("path");
@@ -167,6 +168,6 @@ var Workbook = (function () {
         '[Content_Types].xml'
     ];
     return Workbook;
-})();
+}());
 module.exports = Workbook;
 //# sourceMappingURL=Workbook.js.map
