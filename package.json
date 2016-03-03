@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/npm/npm.git"
+    "url": "https://github.com/KeeTraxx/kexcel"
   },
   "main": "js/Workbook.js",
   "author": {
