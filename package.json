@@ -1,6 +1,6 @@
 {
   "name": "kexcel",
-  "version": "3.0.8",
+  "version": "3.0.10",
   "description": "Create or open and then edit existing XLSX files",
   "keywords": [
     "xlsx",
@@ -34,7 +34,9 @@
     "coveralls": "^2.11.4",
     "istanbul": "^0.4.1",
     "mocha": "^2.3.4",
-    "remap-istanbul": "^0.4.0"
+    "remap-istanbul": "^0.4.0",
+    "typescript": "^1.8.7",
+    "typings": "^0.6.9"
   },
   "scripts": {
     "build": "tsc",
