@@ -173,18 +173,21 @@ var Sheet = (function (_super) {
         return row.$.r;
     };
     Sheet.prototype.getLastRowNumber = function () {
-        if (this.xml.worksheet.sheetData[0].row) {
+        if (this.xml.worksheet.sheetData && this.xml.worksheet.sheetData[0].row) {
             // Remove empty rows
             this.xml.worksheet.sheetData[0].row = this.xml.worksheet.sheetData[0].row.filter(function (row) {
                 return row.c && row.c.length > 0;
             });
-            return _.last(this.xml.worksheet.sheetData[0].row).$.r || 0;
+            return +_.last(this.xml.worksheet.sheetData[0].row).$.r || 0;
         }
         else {
             return 0;
         }
     };
     Sheet.prototype.getRowXML = function (rownum) {
+        if (!this.xml.worksheet.sheetData) {
+            this.xml.worksheet.sheetData = [];
+        }
         if (!this.xml.worksheet.sheetData[0]) {
             this.xml.worksheet.sheetData[0] = { row: [] };
         }

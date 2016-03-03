@@ -210,12 +210,12 @@ class Sheet extends Saveable {
 
 
     public getLastRowNumber():number {
-        if (this.xml.worksheet.sheetData[0].row) {
+        if (this.xml.worksheet.sheetData && this.xml.worksheet.sheetData[0].row) {
             // Remove empty rows
             this.xml.worksheet.sheetData[0].row = this.xml.worksheet.sheetData[0].row.filter(function(row){
                 return row.c && row.c.length > 0;
             });
-            return _.last<K.Row>(this.xml.worksheet.sheetData[0].row).$.r || 0;
+            return +_.last<K.Row>(this.xml.worksheet.sheetData[0].row).$.r || 0;
         } else {
             return 0;
         }
@@ -223,9 +223,14 @@ class Sheet extends Saveable {
     }
 
     private getRowXML(rownum:number):K.Row {
+        if (!this.xml.worksheet.sheetData) {
+            this.xml.worksheet.sheetData = [];
+        }
+
         if (!this.xml.worksheet.sheetData[0]) {
             this.xml.worksheet.sheetData[0] = {row: []};
         }
+
         var rows:Array<K.Row> = this.xml.worksheet.sheetData[0].row;
         var row:K.Row = _.find<K.Row>(rows, r => {
             return r.$.r == rownum

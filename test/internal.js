@@ -70,3 +70,37 @@ describe('Reload an already loaded XML file', function () {
     });
 
 });
+
+describe('sheet.getLastRow', function () {
+    var sheet;
+    it('should return a number', function () {
+        sheet = new Sheet(mockWorkbook, {}, {
+            $: {
+                Target: 'sheet1.xml',
+                Id: 'rId1'
+            }
+        });
+
+        sheet.copyFrom({
+            xml: {
+                "worksheet": {
+                    "$": {
+                        "xmlns": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+                        "xmlns:r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+                        "xmlns:mc": "http://schemas.openxmlformats.org/markup-compatibility/2006",
+                        "mc:Ignorable": "x14ac",
+                        "xmlns:x14ac": "http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"
+                    }
+                }
+            }
+        });
+
+        sheet.getLastRowNumber().should.equal(0);
+
+        sheet.appendRow([42]);
+
+        sheet.getLastRowNumber().should.equal(1);
+
+    });
+
+});
