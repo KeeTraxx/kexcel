@@ -5,7 +5,6 @@
     "xml2js": "registry:dt/xml2js#0.0.0+20160317120654"
   },
   "dependencies": {
-
     "lodash": "registry:npm/lodash#4.0.0+20160416211519"
   }
 }
