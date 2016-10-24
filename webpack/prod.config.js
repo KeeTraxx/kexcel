@@ -30,17 +30,18 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(['dist'], {root: path.dirname(module.parent.filename)}),
         new ForkCheckerPlugin(),
-        new UglifyJsPlugin({
+        /*new UglifyJsPlugin({
             beautify: true,
             mangle: false,
             compress: false,
-            comments: true
+            comments: true,
+            sourceMap: true
             /*
             beautify: false, //prod
             mangle: {screw_ie8: true, keep_fnames: true}, //prod
             compress: {screw_ie8: true}, //prod
             comments: false //prod*/
-        })
+        //})
     ],
     debug: false,
     devtool: 'source-map',
@@ -53,7 +54,8 @@ module.exports = {
         sourceMapFilename: '[name].bundle.map',
         chunkFilename: '[id].[chunkhash].chunk.js',
         library: "kexcel",
-        libraryTarget: 'commonjs2'
+        libraryTarget: 'commonjs2',
+        devtoolModuleFilenameTemplate: 'kexcel/[resource-path]'
     },
     externals: [
         nodeExternals()
