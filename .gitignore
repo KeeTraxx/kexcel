@@ -4,3 +4,4 @@ node_modules
 typings
 test/output-files/*.xlsx
 coverage
+dist
