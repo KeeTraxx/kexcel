@@ -1,17 +1,14 @@
-import * as fs from "fs";
-import * as xml2js from "xml2js";
 import * as Promise from "bluebird";
 import * as _ from "lodash";
 
 import * as Util from "./Util";
 import * as K from ".."
 
-import XMLFile = require('./XMLFile');
-import Workbook = require('./Workbook');
-import Saveable = require('./Saveable');
 import path = require('path');
+import {Saveable} from "./Saveable";
+import {Workbook} from "./Workbook";
 
-class Sheet extends Saveable {
+export class Sheet extends Saveable {
 
     protected id:string;
     public xml:any;
@@ -319,5 +316,3 @@ class Sheet extends Saveable {
     }
 
 }
-
-export = Sheet;

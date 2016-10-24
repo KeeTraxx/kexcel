@@ -1,11 +1,8 @@
-﻿import * as fs from "fs";
-import * as xml2js from "xml2js";
-import * as Promise from "bluebird";
+﻿import * as Promise from "bluebird";
 import * as Util from "./Util";
-import Workbook = require('./Workbook');
-import Saveable = require('./Saveable');
+import {Saveable} from "./Saveable";
 
-class XMLFile extends Saveable {
+export class XMLFile extends Saveable {
     public xml:any;
 
     constructor(protected path:string) {
@@ -19,5 +16,3 @@ class XMLFile extends Saveable {
     }
 
 }
-
-export = XMLFile;

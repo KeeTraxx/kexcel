@@ -12,38 +12,50 @@
     "type": "git",
     "url": "https://github.com/KeeTraxx/kexcel"
   },
-  "main": "js/Workbook.js",
+  "main": "dist/kexcel.bundle.js",
   "author": {
     "name": "Khôi Tran",
     "email": "kt@compile.ch",
     "url": "http://tran-engineering.ch"
   },
   "dependencies": {
+    "@types/archiver": "^0.15.33",
+    "@types/bluebird": "^3.0.35",
+    "@types/lodash": "^4.14.37",
+    "@types/node": "^6.0.45",
+    "@types/rimraf": "0.0.28",
+    "@types/xml2js": "0.0.28",
     "archiver": "^1.0.0",
+    "awesome-typescript-loader": "^2.2.4",
     "bluebird": "^3.3.5",
+    "clean-webpack-plugin": "^0.1.13",
     "dev-null": "^0.1.1",
+    "extract-zip": "^1.5.0",
+    "fs": "0.0.1-security",
     "fstream": "^1.0.8",
     "lodash": "^4.11.1",
+    "mocha": "^3.1.2",
+    "remap-istanbul": "^0.7.0",
     "rimraf": "^2.4.4",
     "temp": "^0.8.3",
+    "typescript": "^2.0.3",
     "unzip": "^0.1.11",
+    "webpack": "^1.13.2",
+    "webpack-node-externals": "^1.5.4",
     "xml2js": "^0.4.15"
   },
   "devDependencies": {
     "chai": "^3.4.1",
     "coveralls": "^2.11.9",
     "istanbul": "^0.4.3",
-    "mocha": "^2.3.4",
     "remap-istanbul": "^0.6.3",
-    "typescript": "^1.8.10",
-    "typings": "^0.7.12"
+    "tslint": "^3.15.1"
   },
   "scripts": {
-    "build": "tsc",
-    "install": "typings install",
+    "install": "webpack",
     "test": "istanbul cover _mocha --report lcovonly -- -R spec && remap-istanbul -i coverage/coverage.json -o coverage/coverage-remapped.lcov -t lcovonly && cat ./coverage/coverage-remapped.lcov | coveralls",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && remap-istanbul -i coverage/coverage.json -o coverage/report -t html",
-    "localtest": "tsc && mocha"
+    "localtest": "mocha"
   },
   "config": {
     "blanket": {

@@ -1,14 +1,11 @@
-﻿import * as fs from "fs";
-import * as xml2js from "xml2js";
-import * as Promise from "bluebird";
+﻿import * as Promise from "bluebird";
 import * as _ from "lodash";
 
 import * as Util from "./Util";
 
-import XMLFile = require('./XMLFile');
-import Workbook = require('./Workbook');
-import Saveable = require('./Saveable');
 import path = require('path');
+import {Saveable} from "./Saveable";
+import {Workbook} from "./Workbook";
 
 interface SharedString {
     t?: Array<string>;
@@ -19,7 +16,7 @@ interface FormattedStrings {
     t: any;
 }
 
-class SharedStrings extends Saveable {
+export class SharedStrings extends Saveable {
     public xml:any;
     private cache:{ [s: string]: number; } = {};
 
@@ -94,5 +91,3 @@ class SharedStrings extends Saveable {
     }
 
 }
-
-export = SharedStrings;

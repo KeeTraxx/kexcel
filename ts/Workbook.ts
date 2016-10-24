@@ -1,25 +1,25 @@
-﻿import * as fs from "fs";
-import * as stream from "stream";
+﻿import {WriteStream} from "fs";
+const fs = require('fs');
 import * as Promise from "bluebird";
 import * as path from "path";
 import * as _ from "lodash";
 import * as rimraf from "rimraf";
 
-var unzip = require('unzip');
+const unzip = require('unzip');
 var mkTempDir:any = Promise.promisify(require('temp').mkdir);
 var fstream = require('fstream');
-var archiver = require('archiver');
+import * as archiver from "archiver";
 
-import XMLFile = require("./XMLFile");
-import SharedStrings = require("./SharedStrings");
-import Sheet = require("./Sheet");
-import Saveable = require("./Saveable");
-import Util = require("./Util");
+import {ReadStream} from "fs";
+import {Saveable} from "./Saveable";
+import {Sheet} from "./Sheet";
+import {XMLFile} from "./XMLFile";
+import {SharedStrings} from "./SharedStrings";
 
 /**
  * Main class for KExcel. Use .new() and .open(file | stream) to open an .xlsx file.
  */
-class Workbook {
+export class Workbook {
 
     /**
      * These files are automatically loaded into files[]
@@ -46,7 +46,7 @@ class Workbook {
      * The array of sheets in this workbook.
      * @type {Array}
      */
-    private sheets:Array<Sheet> = [];
+    public sheets:Sheet[] = [];
 
     /**
      * Template for an empty sheet
@@ -66,7 +66,7 @@ class Workbook {
     /**
      * The source stream (from another stream or file)
      */
-    protected source:stream.Readable;
+    protected source:ReadStream;
 
     constructor(input:any) {
         if (typeof input == 'string') {
@@ -90,7 +90,7 @@ class Workbook {
      * @param input
      * @returns {Promise<Workbook>}
      */
-    public static open(input:stream.Readable | string):Promise<Workbook> {
+    public static open(input:ReadStream | string):Promise<Workbook> {
         var workbook = new Workbook(input);
         return workbook.init();
     }
@@ -192,8 +192,8 @@ class Workbook {
         });
     }
 
-    public pipe<T extends stream.Writable>(destination:T, options?:{ end?: boolean }):T {
-        var archive = archiver('zip');
+    public pipe<T extends WriteStream>(destination:T, options?:{ end?: boolean }):T {
+        var archive:any = archiver('zip');
         Promise.all(_.map(this.files, function (file:XMLFile) {
             return file.save();
         })).then(() => {
@@ -219,4 +219,8 @@ class Workbook {
 
 }
 
-export = Workbook;
+module.exports = {
+    Workbook,
+    open: Workbook.open,
+    'new': Workbook.new
+};

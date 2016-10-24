@@ -1,16 +1,32 @@
 {
   "compilerOptions": {
+    "target": "node",
     "module": "commonjs",
-    "noImplicitAny": false,
-    "removeComments": false,
-    "preserveConstEnums": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "sourceMap": true,
-    "declaration": false,
-    "outDir": "js"
+    "noEmitHelpers": false,
+    "strictNullChecks": false,
+    "baseUrl": "./ts",
+    "paths": {},
+    "lib": [
+      "dom",
+      "es6"
+    ]
   },
   "exclude": [
     "node_modules",
-    "typings/browser",
-    "typings/browser.d.ts"
-  ]
+    "dist"
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "forkChecker": true,
+    "useWebpackText": true
+  },
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "atom": {
+    "rewriteTsconfig": false
+  }
 }

@@ -4,7 +4,7 @@ import * as Promise from "bluebird";
 import Workbook = require('./Workbook');
 
 var parseString:any = Promise.promisify(xml2js.parseString);
-var readFile = Promise.promisify(fs.readFile);
+var readFile:any = Promise.promisify(fs.readFile);
 var writeFile:any = Promise.promisify(fs.writeFile);
 var builder = new xml2js.Builder();
 

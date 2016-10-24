@@ -22,7 +22,6 @@ describe('KExcel new instantiation', function () {
 
     it('should instanciate a new workbook', function () {
         expect(workbook).to.exist;
-        expect(workbook).to.be.an.instanceof(kexcel);
     });
 
     it('should return an empty workbook (with 1 sheet)', function () {
