@@ -1,6 +1,6 @@
 {
   "name": "kexcel",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Create or open and then edit existing XLSX files",
   "keywords": [
     "xlsx",
@@ -31,6 +31,7 @@
     "clean-webpack-plugin": "^0.1.13",
     "dev-null": "^0.1.1",
     "extract-zip": "^1.5.0",
+    "findup-sync": "^0.4.3",
     "fs": "0.0.1-security",
     "fstream": "^1.0.8",
     "lodash": "^4.11.1",
