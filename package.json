@@ -54,8 +54,8 @@
   "scripts": {
     "build": "webpack",
     "install": "webpack",
-    "test": "istanbul cover _mocha --report lcovonly -- -R spec && remap-istanbul --exclude kexcel/webpack,kexcel/~ -i coverage/coverage.json -o coverage/coverage-remapped.lcov -t lcovonly && cat ./coverage/coverage-remapped.lcov | coveralls",
-    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && remap-istanbul --exclude kexcel/webpack,kexcel/~ -i coverage/coverage.json -o coverage/report -t html",
+    "test": "istanbul cover _mocha --report lcovonly -- -R spec && remap-istanbul --exclude dist/webpack,dist/~,dist/external -i coverage/coverage.json -o coverage/coverage-remapped.lcov -t lcovonly && cat ./coverage/coverage-remapped.lcov | coveralls",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && remap-istanbul --exclude dist/webpack,dist/~,dist/external -i coverage/coverage.json -o coverage/report -t html",
     "localtest": "mocha"
   },
   "config": {

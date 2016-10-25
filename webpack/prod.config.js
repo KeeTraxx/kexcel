@@ -61,7 +61,7 @@ module.exports = {
         chunkFilename: '[id].[chunkhash].chunk.js',
         library: "kexcel",
         libraryTarget: 'commonjs2',
-        devtoolModuleFilenameTemplate: 'kexcel/[resource-path]'
+        devtoolModuleFilenameTemplate: '../[resource-path]'
     },
     externals: [
         nodeExternals({modulesDir: MODULES_DIR})
