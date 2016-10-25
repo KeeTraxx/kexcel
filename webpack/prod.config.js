@@ -67,7 +67,7 @@ module.exports = {
         nodeExternals({modulesDir: MODULES_DIR})
     ],
     node: {
-        __dirname: true
+        __dirname: false
     }
     /*tslint: {
      emitErrors: true,
